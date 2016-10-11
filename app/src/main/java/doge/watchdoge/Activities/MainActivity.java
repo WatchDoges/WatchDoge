@@ -1,13 +1,15 @@
-package doge.watchdoge;
+package doge.watchdoge.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ChooseReport extends AppCompatActivity {
+import doge.watchdoge.R;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_report);
+        setContentView(R.layout.activity_main);
     }
 }
