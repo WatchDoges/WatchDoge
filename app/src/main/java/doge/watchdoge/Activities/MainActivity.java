@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import doge.watchdoge.R;
 
-public class ChooseReport extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
