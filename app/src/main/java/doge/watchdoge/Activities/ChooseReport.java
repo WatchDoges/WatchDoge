@@ -1,7 +1,9 @@
-package doge.watchdoge;
+package doge.watchdoge.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import doge.watchdoge.R;
 
 public class ChooseReport extends AppCompatActivity {
 
