@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:weightSum="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/title_field"
+                android:hint="Add title"
+                android:layout_weight="0.05"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/desc_field"
+                android:hint="Describe the problem"
+                android:layout_weight="0.4"
+                android:gravity="top|center_vertical" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                android:id="@+id/imageView"
+                android:layout_weight="0.45"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.1"
+                android:minHeight="17dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:id="@+id/file_button"
+                    android:layout_gravity="right"
+                    android:layout_weight="0.1"
+                    android:onClick="fileButtonClick"
+                    android:background="@android:drawable/ic_menu_gallery"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/colorPrimary" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/send_button"
+                    android:onClick="sendButtonClick"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:drawable/ic_menu_send"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_weight="0.10"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:id="@+id/camera_button"
+                    android:layout_weight="0.10"
+                    android:onClick="cameraButtonClick"
+                    android:background="@android:drawable/ic_menu_camera"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/colorPrimary" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
