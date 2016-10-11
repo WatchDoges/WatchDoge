@@ -1,4 +1,4 @@
-package doge.watchdoge.emailsender;
+package doge.watchdoge.externalsenders;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,9 +7,7 @@ import java.util.ArrayList;
  * Created by Gorbad on 11/10/2016.
  */
 
-public interface IEmailSender {
-
-    public boolean send();
+public interface IEmailSender extends ISender {
 
     public void changeMessage(String message);
     public void addToMessage(String message);

@@ -1,4 +1,4 @@
-package doge.watchdoge.Activities;
+package doge.watchdoge.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
