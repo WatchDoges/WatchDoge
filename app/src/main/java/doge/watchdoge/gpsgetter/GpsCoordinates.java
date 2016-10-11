@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public class GpsCoordinates implements IGpsCoordinates {
     private LocationManager locationManager;
-    LocationListener locationListener;
+    private LocationListener locationListener;
 
     private Pair<Double, Double> gpsCoords;
     private float gpsAccuracy = 0;
