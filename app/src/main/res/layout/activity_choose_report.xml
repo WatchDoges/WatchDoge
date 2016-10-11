@@ -15,5 +15,58 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"></LinearLayout>
+        android:layout_centerHorizontal="true"
+        android:weightSum="1"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:text="Chose report type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:layout_marginBottom="50dp"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:text="Chose private report if there is something you want to report in your own appartment."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/private_desc"
+            android:layout_weight="0.14"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:text="Private Report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/private_activity_button"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="100dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light"
+            android:padding="5dp" />
+
+        <TextView
+            android:text="Chose public report if there is something you want to report in a public place."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/public_desc"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:text="Public Report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/public_activity_button"
+            android:layout_weight="0.1"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light"
+            android:padding="5dp" />
+
+    </LinearLayout>
 </RelativeLayout>
