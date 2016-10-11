@@ -1,7 +1,6 @@
-package doge.watchdoge.emailsender;
+package doge.watchdoge.externalsenders;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,6 @@ public class DummyEmailSender implements IEmailSender {
         this.receivers.add(receiver);
     }
 
-
     @Override
     public ArrayList<String> getReceivers(){
         return this.receivers;
@@ -55,7 +53,6 @@ public class DummyEmailSender implements IEmailSender {
     public ArrayList<File> getAttachments(){
         return this.attachments;
     }
-
 
     @Override
     public boolean send(){

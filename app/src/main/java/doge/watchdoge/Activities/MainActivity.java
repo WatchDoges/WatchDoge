@@ -1,9 +1,16 @@
-package doge.watchdoge.Activities;
+package doge.watchdoge.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import doge.watchdoge.R;
+import doge.watchdoge.externalsenders.EmailSender;
+import doge.watchdoge.externalsenders.IEmailSender;
 
 public class MainActivity extends AppCompatActivity {
 
