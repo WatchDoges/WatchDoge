@@ -22,6 +22,27 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.05">
+
+                <RadioButton
+                    android:text="Your Apartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/private_button"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="Public Area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/public_button"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +67,7 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_launcher"
                 android:id="@+id/imageView"
-                android:layout_weight="0.45"/>
+                android:layout_weight="0.50" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -56,34 +77,34 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.1"
                 android:minHeight="50dp">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:id="@+id/file_button"
-                    android:layout_gravity="right"
-                    android:layout_weight="0.1"
-                    android:onClick="fileButtonClick"
-                    android:background="@android:drawable/ic_menu_gallery"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="@color/colorPrimary" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/send_button"
-                    android:onClick="sendButtonClick"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@android:drawable/ic_menu_send"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:layout_weight="0.10"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:id="@+id/camera_button"
                     android:layout_weight="0.10"
                     android:onClick="cameraButtonClick"
-                    android:background="@android:drawable/ic_menu_camera"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="@color/colorPrimary" />
+                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Camera"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@android:color/background_light" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_button"
+                    android:onClick="sendButtonClick"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_weight="0.10"
+                    android:text="Send"
+                    android:textColor="@android:color/background_light"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp" />
+
             </LinearLayout>
 
         </LinearLayout>
