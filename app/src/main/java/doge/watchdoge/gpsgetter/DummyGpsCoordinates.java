@@ -8,7 +8,6 @@ public class DummyGpsCoordinates implements IGpsCoordinates {
     private float gpsAccuracy = 0;
     private long gpsAge = 0;
 
-    @Override
     public void GpsCoordinates(Context context) {
         gpsCoords = new Pair<Double, Double>(60.462518, 22.288918);
         gpsAccuracy = (float) 5.0;
