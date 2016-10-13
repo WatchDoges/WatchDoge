@@ -1,11 +1,14 @@
 package doge.watchdoge.gpsgetter;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 
 import java.util.Calendar;
@@ -44,8 +47,17 @@ public class GpsCoordinates {
 
             public void onProviderDisabled(String provider) {}
         };
-        Looper.prepare();
-        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+
+        //selfcheck if has permission
+        int permissionCheck = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_CALENDAR);
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+            Looper.prepare();
+            locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+        }
+        else if(permissionCheck == PackageManager.PERMISSION_DENIED){
+            throw new SecurityException("No permission to use GPS");
+        }
     }
 
     public static Pair<Double, Double> getGPS() {
