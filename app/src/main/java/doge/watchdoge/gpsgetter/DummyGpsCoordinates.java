@@ -1,22 +1,20 @@
 package doge.watchdoge.gpsgetter;
 
 import android.content.Context;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
-public class DummyGpsCoordinates implements IGpsCoordinates {
-    private Pair<Double, Double> gpsCoords;
+public class DummyGpsCoordinates {
+    private static Pair<Double, Double> gpsCoords;
     private float gpsAccuracy = 0;
     private long gpsAge = 0;
 
-    @Override
-    public void GpsCoordinates(Context context) {
-        gpsCoords = new Pair<Double, Double>(60.462518, 22.288918);
+    public DummyGpsCoordinates(Context context) {
+        gpsCoords = new Pair<>((double) 60.462518, (double) 22.288918);
         gpsAccuracy = (float) 5.0;
         gpsAge = (long) 2;
     }
 
-    @Override
-    public Pair<Double, Double> getGPS() {
+    public static Pair<Double, Double> getGPS() {
         return gpsCoords;
     }
 }

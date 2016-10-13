@@ -1,23 +1,29 @@
 package doge.watchdoge.gpsgetter;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Pair;
+import android.os.Looper;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 
 import java.util.Calendar;
 
-public class GpsCoordinates implements IGpsCoordinates {
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+import static java.lang.Thread.sleep;
 
-    private Pair<Double, Double> gpsCoords;
-    private float gpsAccuracy = 0;
+public class GpsCoordinates {
+    private static LocationManager locationManager;
+    private static LocationListener locationListener;
+
+    private static Pair<Double, Double> gpsCoords;
+    private static float gpsAccuracy = 0;
     private long gpsAge = 0;
 
-    public void GpsCoordinates(Context context){
+    public GpsCoordinates(Context context){
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Use GPS location data
         String locationProvider = LocationManager.GPS_PROVIDER;
@@ -42,14 +48,22 @@ public class GpsCoordinates implements IGpsCoordinates {
             public void onProviderDisabled(String provider) {}
         };
 
-        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+        //selfcheck if has permission
+        int permissionCheck = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_CALENDAR);
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+            Looper.prepare();
+            locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+        }
+        else if(permissionCheck == PackageManager.PERMISSION_DENIED){
+            throw new SecurityException("No permission to use GPS");
+        }
     }
 
-    @Override
-    public Pair<Double, Double> getGPS() {
+    public static Pair<Double, Double> getGPS() {
         while(gpsAccuracy==(float)0.0 || gpsAccuracy>(float)20.0){
             try{
-                wait(100);
+                sleep(100);
             }catch(InterruptedException ie){
 
             }
