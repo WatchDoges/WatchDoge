@@ -5,7 +5,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Pair;
+import android.os.Looper;
+import android.support.v4.util.Pair;
 
 import java.util.Calendar;
 
@@ -19,7 +20,7 @@ public class GpsCoordinates {
     private static float gpsAccuracy = 0;
     private long gpsAge = 0;
 
-    public void GpsCoordinates(Context context){
+    public GpsCoordinates(Context context){
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Use GPS location data
         String locationProvider = LocationManager.GPS_PROVIDER;
@@ -43,7 +44,7 @@ public class GpsCoordinates {
 
             public void onProviderDisabled(String provider) {}
         };
-
+        Looper.prepare();
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
     }
 
