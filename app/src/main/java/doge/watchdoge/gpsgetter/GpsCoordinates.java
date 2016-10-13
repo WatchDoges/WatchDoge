@@ -9,12 +9,14 @@ import android.util.Pair;
 
 import java.util.Calendar;
 
-public class GpsCoordinates implements IGpsCoordinates {
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+import static java.lang.Thread.sleep;
 
-    private Pair<Double, Double> gpsCoords;
-    private float gpsAccuracy = 0;
+public class GpsCoordinates {
+    private static LocationManager locationManager;
+    private static LocationListener locationListener;
+
+    private static Pair<Double, Double> gpsCoords;
+    private static float gpsAccuracy = 0;
     private long gpsAge = 0;
 
     public void GpsCoordinates(Context context){
@@ -45,11 +47,10 @@ public class GpsCoordinates implements IGpsCoordinates {
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
     }
 
-    @Override
-    public Pair<Double, Double> getGPS() {
+    public static Pair<Double, Double> getGPS() {
         while(gpsAccuracy==(float)0.0 || gpsAccuracy>(float)20.0){
             try{
-                wait(100);
+                sleep(100);
             }catch(InterruptedException ie){
 
             }
