@@ -1,14 +1,17 @@
 package doge.watchdoge.activities;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import doge.watchdoge.R;
+import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.externalsenders.IEmailSender;
 
@@ -18,5 +21,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
+
+        //example of how to use CreateGPSPicture
+        Bitmap tmp = createGPSPicture.CreateGPSPictue();
+        ImageView img = (ImageView)findViewById(R.id.imageView);
+        img.setImageBitmap(tmp);
     }
 }
