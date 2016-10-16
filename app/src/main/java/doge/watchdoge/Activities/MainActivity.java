@@ -14,6 +14,7 @@ import doge.watchdoge.R;
 import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.externalsenders.IEmailSender;
+import doge.watchdoge.gpsgetter.DummyGpsCoordinates;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity_layout);
 
         //example of how to use CreateGPSPicture
-        Bitmap tmp = createGPSPicture.CreateGPSPictue();
+        DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
+        Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
         ImageView img = (ImageView)findViewById(R.id.imageView);
         img.setImageBitmap(tmp);
     }

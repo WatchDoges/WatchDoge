@@ -2,7 +2,8 @@ package doge.watchdoge.creategpspicture;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.Pair;
-import doge.watchdoge.gpsgetter.GpsCoordinates;
+
+import doge.watchdoge.gpsgetter.DummyGpsCoordinates;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,9 +12,10 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class createGPSPicture {
-    public static Bitmap CreateGPSPictue(){
+
+    public static Bitmap CreateGPSPictue(DummyGpsCoordinates dummy){
         //Pair<Double, Double> coordinates = Pair.create(60.457027 ,2022.283202);
-        Pair<Double, Double> coordinates = GpsCoordinates.getGPS();
+        Pair<Double, Double> coordinates = dummy.getGPS();
         String imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
                 coordinates.first + ",%" +coordinates.second;
 

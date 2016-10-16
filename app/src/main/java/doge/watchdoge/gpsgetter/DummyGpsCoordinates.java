@@ -9,7 +9,7 @@ public class DummyGpsCoordinates {
     private long gpsAge = 0;
 
     public DummyGpsCoordinates(Context context) {
-        gpsCoords = new Pair<>((double) 60.462518, (double) 22.288918);
+        gpsCoords = new Pair<>((double) 60.462518, (double) 2022.283202);
         gpsAccuracy = (float) 5.0;
         gpsAge = (long) 2;
     }
