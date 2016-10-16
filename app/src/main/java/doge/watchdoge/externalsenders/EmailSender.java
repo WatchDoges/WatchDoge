@@ -2,103 +2,92 @@ package doge.watchdoge.externalsenders;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
+import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by Gorbad on 11/10/2016.
  */
 
-//Button button = (Button)findViewById(R.id.private_activity_button);
-//        button.setOnClickListener(new Button.OnClickListener() {
-//public void onClick(View v) {
-//        doStuff();
-//        }
-//        });
-
-//private void doStuff(){
-        //ArrayList<File> att = new ArrayList<>();
-        //ArrayList<String> rec = new ArrayList<>();
-        //rec.add("miroeklu@abo.fi");
-        //rec.add("miroeklu@gmail.com");
-        //String message = "This is just a test.";
-
-        //IEmailSender sender = new EmailSender(att, rec, message);
-        //sender.send();
-//}
-
-public class EmailSender extends AppCompatActivity implements IEmailSender{
-
-    private ArrayList<File> attachments = new ArrayList<>();
-    private ArrayList<String> receivers = new ArrayList<>();
-    private String message = "NOT GIVEN";
-
-    public EmailSender(ArrayList<File> attachments, ArrayList<String> receivers, String message){
-        this.attachments = attachments;
-        this.receivers = receivers;
-        this.message = message;
-    }
-
-    @Override
-    public void changeMessage(String message){
-        this.message = message;
-    }
-
-    @Override
-    public void addToMessage(String message){
-        this.message += message;
-    }
-
-    @Override
-    public String getMessage(){
-        return this.message;
-    }
-
-    @Override
-    public void addReceiver(String receiver){
-        this.receivers.add(receiver);
-    }
-
-    @Override
-    public ArrayList<String> getReceivers(){
-        return this.receivers;
-    }
-
-    @Override
-    public void addAttachment(File attachment){
-        this.attachments.add(attachment);
-    }
-
-    @Override
-    public ArrayList<File> getAttachments(){
-        return this.attachments;
-    }
+public class EmailSender extends GeneralSender{
 
     @Override
     public boolean send(){
-        System.out.println("You have: " + (this.attachments.size()) + " attachments, " +
-                (this.receivers).size() + " receiverse and your message is: " + this.message);
+        return false;
+        //System.out.println("Attempting to send email...");
+        //if(parentView==null || information==null){
+        //    System.out.println("Failed to send email. Information and/or ParentView has not been provided.");
+        //    return false;
+        //}
+        //Intent i = new Intent(Intent.ACTION_SEND);
+        //i.setType("message/rfc822");
+        //for(String receiver : this.receivers) {
+        //    i.putExtra(Intent.EXTRA_EMAIL, new String[]{receiver});
+        //}
+        //i.putExtra(Intent.EXTRA_SUBJECT, "Auto-Generated Title");
+        //i.putExtra(Intent.EXTRA_TEXT, "This is a test message");
+        //for(File file : this.attachments) {
+         //   Uri uri = Uri.fromFile(file);
+        //    i.putExtra(Intent.EXTRA_STREAM, uri);
+        //}
 
+        //try {
+        //    System.out.println("Trying to start activity...");
+        //    //startActivity(Intent.createChooser(i, "Send mail..."));
+        //    System.out.println("Succeeded in switching activity?");
+        //    return true;
+        //} catch (Exception ex) {
+        //    ex.printStackTrace();
+        //    System.out.println("ERROR when sending email!");
+        //    return false;
+        //}
+    }
+
+    public static Intent getIntent(HashMap<String, Object> info){
+        System.out.println("Creating Intent i..");
+        if(info==null){
+            System.out.println("Info is null");
+            return null;
+        }
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
-        for(String receiver : this.receivers) {
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{receiver});
-        }
-        i.putExtra(Intent.EXTRA_SUBJECT, "Auto-Generated Title");
-        i.putExtra(Intent.EXTRA_TEXT, this.message);
-        for(File file : this.attachments) {
-            Uri uri = Uri.fromFile(file);
-            i.putExtra(Intent.EXTRA_STREAM, uri);
+
+        if(info.containsKey("title")){
+            i.putExtra(Intent.EXTRA_SUBJECT, info.get("title").toString());
+        } else {
+            i.putExtra(Intent.EXTRA_SUBJECT, "PLACEHOLDER TITLE");
         }
 
-        try {
-            System.out.println("Trying to start activity...");
-            //startActivity(Intent.createChooser(i, "Send mail..."));
-            System.out.println("Succeeded in switching activity?");
-        } catch (Exception ex) {
-            System.out.println("ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        if(info.containsKey("receivers")){
+            ArrayList<String> rescvrs = (ArrayList<String>)info.get("receivers");
+            String[] targets = new String[rescvrs.size()];
+            for(int z = 0; z < rescvrs.size(); z++){
+                targets[z] = rescvrs.get(z);
+            }
+            i.putExtra(Intent.EXTRA_EMAIL, targets);
+        } else {
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{});
         }
-        return true;
+
+        if(info.containsKey("message")){
+            String msg = info.get("message").toString();
+            i.putExtra(Intent.EXTRA_TEXT, msg);
+        } else {
+            i.putExtra(Intent.EXTRA_TEXT, "PLACEHOLDER MESSAGE");
+        }
+
+        if(info.containsKey("attachments")){
+            ArrayList<File> attachments = (ArrayList<File>)info.get("attachments");
+            for(File file : attachments) {
+                Uri uri = Uri.fromFile(file);
+                i.putExtra(Intent.EXTRA_STREAM, uri);
+            }
+        }
+        return i;
     }
 }
