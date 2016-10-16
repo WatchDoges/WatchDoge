@@ -7,8 +7,6 @@
 /build
 /captures
 
-.idea
-
 .idea/gradle.xml
 
 .idea/misc.xml
@@ -17,3 +15,4 @@
 
 .idea/vcs.xml
 .idea/.name
+.idea/runConfigurations.xml
