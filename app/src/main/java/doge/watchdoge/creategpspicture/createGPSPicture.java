@@ -17,7 +17,7 @@ public class createGPSPicture {
         //Pair<Double, Double> coordinates = Pair.create(60.457027 ,2022.283202);
         Pair<Double, Double> coordinates = dummy.getGPS();
         String imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
-                coordinates.first + ",%" +coordinates.second;
+                coordinates.first + ",%20" +coordinates.second;
 
         Bitmap picture = null;
         try {
