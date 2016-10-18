@@ -1,7 +1,9 @@
 package doge.watchdoge.converters;
 
 import android.graphics.Bitmap;
+import android.os.Environment;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -11,10 +13,12 @@ import java.io.IOException;
 
 public class ImageConverters {
 
-    public static void bitmapToPNG(Bitmap bm, String filename){
+    public static String bitmapToPNG(Bitmap bm, String filename){
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(filename);
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File file = new File(path, filename + ".png");
+            out = new FileOutputStream(file);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();
@@ -22,11 +26,14 @@ public class ImageConverters {
             try {
                 if (out != null) {
                     out.close();
+                    return filename+".png";
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
         }
+        return null;
     }
 
     public static void bitmapToJPEG(Bitmap bm, String filename){
