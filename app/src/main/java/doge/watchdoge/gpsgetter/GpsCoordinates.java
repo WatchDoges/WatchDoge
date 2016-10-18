@@ -62,11 +62,23 @@ public class GpsCoordinates {
     }
 
     public static Pair<Double, Double> getGPS() {
-        while(gpsAccuracy==(float)0.0 || gpsAccuracy<(float)20.0){
+        //DEBUG ************
+        boolean debug = true;
+        if(debug){
             try{
-                sleep(100);
-            }catch(InterruptedException ie){
-
+                sleep(1000*5);
+            }
+            catch(InterruptedException ie) {
+            }
+        }
+        //DEBUG END *********
+        else {
+            while (gpsAccuracy == (float) 0.0 || gpsAccuracy < (float) 20.0) {
+                try{
+                    sleep(100);
+                }
+                catch(InterruptedException ie) {
+                }
             }
         }
         // Remove the listener added
