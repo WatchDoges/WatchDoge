@@ -22,7 +22,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
-            <LinearLayout
+            <RadioGroup
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/public_button"
                     android:layout_weight="1" />
-            </LinearLayout>
+            </RadioGroup>
 
             <EditText
                 android:layout_width="match_parent"
