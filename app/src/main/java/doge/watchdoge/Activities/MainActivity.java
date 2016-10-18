@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import doge.watchdoge.R;
+import doge.watchdoge.converters.ImageConverters;
 import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.externalsenders.ISender;
@@ -24,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
+
+        DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
+        Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
+        ImageView img = (ImageView)findViewById(R.id.imageView);
+        img.setImageBitmap(tmp);
+        ImageConverters.bitmapToPNG(tmp, "gpspicture");
 
         final Button button = (Button) findViewById(R.id.send_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -41,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //example of how to use CreateGPSPicture
-        //DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
-        //Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
-        //ImageView img = (ImageView)findViewById(R.id.imageView);
-        //img.setImageBitmap(tmp);
+
     }
 }
