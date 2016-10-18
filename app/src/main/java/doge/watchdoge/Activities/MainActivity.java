@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -39,15 +40,22 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, Object> hm = new HashMap<String, Object>();
                 hm.put("title","Email Title, custom.");
                 hm.put("message","Email message comes here. Very nice indeed.");
-                ArrayList<String> list = new ArrayList<String>();
+
+                ArrayList<String> list = new ArrayList<>();
                 list.add("miroeklu@abo.fi");
                 list.add("miroeklu@gmail.com");
                 hm.put("receivers",list);
-                ArrayList<String> uris = new ArrayList<>();
-                uris.add("gpspicture.png");
+
+                ArrayList<Uri> uris = new ArrayList<>();
+                File path1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File filelocation = new File(path1, "gpspicture.png");
+                Uri path = Uri.fromFile(filelocation);
+                uris.add(path);
                 hm.put("attachments",uris);
+
                 Intent i = EmailSender.getIntent(hm);
                 startActivity(Intent.createChooser(i, "Send mail..."));
+
             }
         });
 

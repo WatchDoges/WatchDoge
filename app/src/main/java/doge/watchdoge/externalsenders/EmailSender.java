@@ -80,19 +80,14 @@ public class EmailSender extends GeneralSender{
             String msg = info.get("message").toString();
             i.putExtra(Intent.EXTRA_TEXT, msg);
         } else {
-            i.putExtra(Intent.EXTRA_TEXT, "PLACEHOLDER MESSAGE");
+            i.putExtra(Intent.EXTRA_TEXT, "Placeholder");
         }
 
         ArrayList<Uri> uris = new ArrayList<>();
         if(info.containsKey("attachments")){
-            ArrayList<String> attachments = (ArrayList<String>)info.get("attachments");
-            for(String filename : attachments) {
-                File path1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                File filelocation = new File(path1, filename);
-                Uri path = Uri.fromFile(filelocation);
-                uris.add(path);
-                //Uri uri = Uri.fromFile(file);
-                //i.putExtra(Intent.EXTRA_STREAM, path);
+            ArrayList<Uri> attachments = (ArrayList<Uri>)info.get("attachments");
+            for(Uri uri : attachments) {
+                uris.add(uri);
             }
         }
 
