@@ -23,9 +23,7 @@ public class GPSPicture extends AsyncTask<String, Void, Bitmap> {
 
     public static Bitmap getBitmapFromURL(String src) {
         try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-            StrictMode.setThreadPolicy(policy);
+          
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
