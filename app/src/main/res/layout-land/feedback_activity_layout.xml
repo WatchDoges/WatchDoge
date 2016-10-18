@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weightSum="1">
+
+        <TextView
+            android:text="Report goes here "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/result_view"
+            android:layout_weight="0.4"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="Close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/close_button"
+                android:layout_weight="0.5" />
+
+            <Button
+                android:text="New report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_button"
+                android:layout_weight="0.38" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
