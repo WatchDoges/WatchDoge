@@ -10,6 +10,6 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chose_report);
+        setContentView(R.layout.feedback_activity_layout);
     }
 }
