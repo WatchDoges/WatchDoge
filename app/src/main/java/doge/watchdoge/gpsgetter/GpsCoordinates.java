@@ -58,6 +58,7 @@ public class GpsCoordinates {
         else if(permissionCheck == PackageManager.PERMISSION_DENIED){
             throw new SecurityException("No permission to use GPS");
         }
+        else throw new SecurityException("Failure at permission request");
     }
 
     public static Pair<Double, Double> getGPS() {
