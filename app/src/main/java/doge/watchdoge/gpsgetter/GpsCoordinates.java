@@ -61,7 +61,7 @@ public class GpsCoordinates {
     }
 
     public static Pair<Double, Double> getGPS() {
-        while(gpsAccuracy==(float)0.0 || gpsAccuracy>(float)20.0){
+        while(gpsAccuracy==(float)0.0 || gpsAccuracy<(float)20.0){
             try{
                 sleep(100);
             }catch(InterruptedException ie){
