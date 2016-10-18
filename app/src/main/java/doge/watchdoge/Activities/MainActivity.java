@@ -2,6 +2,7 @@ package doge.watchdoge.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
         ImageView img = (ImageView)findViewById(R.id.imageView);
         img.setImageBitmap(tmp);
-        ImageConverters.bitmapToPNG(tmp, "gpspicture");
+        String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
 
         final Button button = (Button) findViewById(R.id.send_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 list.add("miroeklu@abo.fi");
                 list.add("miroeklu@gmail.com");
                 hm.put("receivers",list);
+                ArrayList<String> uris = new ArrayList<>();
+                uris.add("gpspicture.png");
+                hm.put("attachments",uris);
                 Intent i = EmailSender.getIntent(hm);
                 startActivity(Intent.createChooser(i, "Send mail..."));
             }

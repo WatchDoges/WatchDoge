@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
 import android.view.View;
@@ -54,7 +56,7 @@ public class EmailSender extends GeneralSender{
             System.out.println("Info is null");
             return null;
         }
-        Intent i = new Intent(Intent.ACTION_SEND);
+        Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
         i.setType("message/rfc822");
 
         if(info.containsKey("title")){
@@ -81,13 +83,20 @@ public class EmailSender extends GeneralSender{
             i.putExtra(Intent.EXTRA_TEXT, "PLACEHOLDER MESSAGE");
         }
 
+        ArrayList<Uri> uris = new ArrayList<>();
         if(info.containsKey("attachments")){
-            ArrayList<File> attachments = (ArrayList<File>)info.get("attachments");
-            for(File file : attachments) {
-                Uri uri = Uri.fromFile(file);
-                i.putExtra(Intent.EXTRA_STREAM, uri);
+            ArrayList<String> attachments = (ArrayList<String>)info.get("attachments");
+            for(String filename : attachments) {
+                File path1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File filelocation = new File(path1, filename);
+                Uri path = Uri.fromFile(filelocation);
+                uris.add(path);
+                //Uri uri = Uri.fromFile(file);
+                //i.putExtra(Intent.EXTRA_STREAM, path);
             }
         }
+
+        i.putExtra(Intent.EXTRA_STREAM, uris);
         return i;
     }
 }
