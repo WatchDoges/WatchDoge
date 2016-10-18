@@ -25,9 +25,9 @@ import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.externalsenders.ISender;
 import doge.watchdoge.gpsgetter.DummyGpsCoordinates;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private int requestGranted = 1;
+    private final int requestGranted = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +99,29 @@ public class MainActivity extends AppCompatActivity {
         if(requesting.length>0){
             ActivityCompat.requestPermissions(this.getParent(), requesting, requestGranted);
         }
+    }
 
-        //DEBUG
-        // Flash toast whether the permissions have been granted or not
-        if(requestGranted==1){
-            //TODO add toast success
-        }
-        else{
-            //TODO add toast fail
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case requestGranted: {
+                // If request is cancelled, the result arrays are empty.
+
+                // DEBUG
+                // Flash toast whether the permissions have been granted or not
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // TODO add toast success
+                }
+                else {
+                    // TODO add toast fail
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }
