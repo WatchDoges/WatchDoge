@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,10 +113,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // Flash toast whether the permissions have been granted or not
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // TODO add toast success
+                    Toast t = new Toast(this.getApplicationContext());
+                    t.setDuration(Toast.LENGTH_LONG);
+                    t.setText("Permission granted for location data");
+                    t.show();
                 }
                 else {
-                    // TODO add toast fail
+                    Toast t = new Toast(this.getApplicationContext());
+                    t.setDuration(Toast.LENGTH_LONG);
+                    t.setText("Permission denied for location data");
+                    t.show();
                 }
                 return;
             }
