@@ -48,6 +48,6 @@ public class GpsUTest {
     public void dummyPairSecondValueTest() throws Exception{
         assertNotNull(pair.second);
         double second = pair.second.doubleValue();
-        assertEquals((double) 22.288918, second);
+        assertEquals((double) 22.283202, second);
     }
 }
