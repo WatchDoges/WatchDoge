@@ -73,7 +73,7 @@ public class GpsCoordinates {
         }
         //DEBUG END *********
         else {
-            while (gpsAccuracy == (float) 0.0 || gpsAccuracy < (float) 20.0) {
+            while (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
                 try{
                     sleep(100);
                 }
