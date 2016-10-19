@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.util.Pair;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,6 +23,12 @@ public class GpsITest {
     private Pair<Double, Double> pair;
     private GpsCoordinates gpsCoordinates;
 
+    @Before
+    public void initial(){
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        gpsCoordinates = new GpsCoordinates(appContext);
+    }
+
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -32,12 +39,12 @@ public class GpsITest {
 
     @Test
     public void runGpsGetter(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        gpsCoordinates = new GpsCoordinates(appContext);
-        assertNotNull(gpsCoordinates);
-
         Pair<Double, Double> pair = gpsCoordinates.getGPS();
         assertNotNull(pair);
+    }
+
+    @Test
+    public void gpsInitCheck(){
+        assertNotNull(gpsCoordinates);
     }
 }

@@ -5,7 +5,7 @@ import android.support.v4.util.Pair;
 
 public class DummyGpsCoordinates {
     private static Pair<Double, Double> gpsCoords;
-    private float gpsAccuracy = 0;
+    private static float gpsAccuracy = 0;
     private long gpsAge = 0;
 
     public DummyGpsCoordinates(Context context) {
@@ -15,6 +15,15 @@ public class DummyGpsCoordinates {
     }
 
     public static Pair<Double, Double> getGPS() {
-        return gpsCoords;
+        boolean debug = true;
+        if(debug) {
+            return gpsCoords;
+        }
+        else {
+            if (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
+                return null;
+            }
+            return gpsCoords;
+        }
     }
 }
