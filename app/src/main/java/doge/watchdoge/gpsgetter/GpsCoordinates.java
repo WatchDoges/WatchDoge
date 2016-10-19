@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import static java.lang.Thread.sleep;
 public class GpsCoordinates {
     private static LocationManager locationManager;
     private static LocationListener locationListener;
+    private static String locationProvider;
 
     private static Pair<Double, Double> gpsCoords;
     private static float gpsAccuracy = 0;
@@ -26,7 +28,7 @@ public class GpsCoordinates {
     public GpsCoordinates(Context context){
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Use GPS location data
-        String locationProvider = LocationManager.GPS_PROVIDER;
+        locationProvider = LocationManager.GPS_PROVIDER;
 
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -41,11 +43,44 @@ public class GpsCoordinates {
                 }
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            //TODO remove used listener and create new with the best available provider
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                if (provider.equals(locationManager.GPS_PROVIDER)){
+                    if(status == LocationProvider.AVAILABLE && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
+                        locationProvider = provider;
+                    }
+                    else if((status == LocationProvider.TEMPORARILY_UNAVAILABLE || status == LocationProvider.OUT_OF_SERVICE) && locationProvider.equals(locationManager.GPS_PROVIDER)){
+                        locationProvider = locationManager.NETWORK_PROVIDER;
+                    }
+                }
+                else if (provider.equals(locationManager.NETWORK_PROVIDER)){
+                    if(status == LocationProvider.AVAILABLE && locationProvider.equals(locationManager.GPS_PROVIDER)){
+                    }
+                    else if((status == LocationProvider.TEMPORARILY_UNAVAILABLE || status == LocationProvider.OUT_OF_SERVICE) && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
+                        locationProvider = locationManager.GPS_PROVIDER;
+                    }
+                }
+            }
 
-            public void onProviderEnabled(String provider) {}
+            //TODO remove used listener and create new with the best available provider
+            public void onProviderEnabled(String provider) {
+                if(provider.equals(locationManager.GPS_PROVIDER) && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
+                    locationProvider = locationManager.GPS_PROVIDER;
+                }
+                else if(provider.equals(locationManager.NETWORK_PROVIDER) && locationProvider.equals(locationManager.GPS_PROVIDER)){
+                    // Nothing to do, better accuracy is already used
+                }
+            }
 
-            public void onProviderDisabled(String provider) {}
+            //TODO remove used listener and create new with the best available provider
+            public void onProviderDisabled(String provider) {
+                if(provider.equals(locationManager.GPS_PROVIDER)){
+                    locationProvider = locationManager.NETWORK_PROVIDER;
+                }
+                else if(provider.equals(locationManager.NETWORK_PROVIDER)){
+                    locationProvider = locationManager.GPS_PROVIDER;
+                }
+            }
         };
 
         //selfcheck if has permission
@@ -53,7 +88,8 @@ public class GpsCoordinates {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
             //Looper.prepare();
-            locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(locationProvider, 1000, 5, locationListener);
+            //(locationProvider, 0, 0, locationListener);
         }
         else if(permissionCheck == PackageManager.PERMISSION_DENIED){
             throw new SecurityException("No permission to use GPS");
@@ -77,6 +113,8 @@ public class GpsCoordinates {
             while (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
                 try{
                     sleep(100);
+                    System.out.println("gpsCoords is null: "+gpsCoords==null);
+                    return gpsCoords;
                 }
                 catch(InterruptedException ie) {
                 }
