@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.support.v4.util.Pair;
 
 import doge.watchdoge.gpsgetter.DummyGpsCoordinates;
+import doge.watchdoge.gpsgetter.GpsCoordinates;
 
 import java.util.concurrent.ExecutionException;
 
