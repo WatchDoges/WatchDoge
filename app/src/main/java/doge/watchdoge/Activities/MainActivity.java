@@ -30,7 +30,7 @@ import doge.watchdoge.gpsgetter.GpsCoordinates;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final int requestGranted = 1;
-    private DummyGpsCoordinates dummy;
+    private GpsCoordinates dummy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Check for permissions and request as necessary
         requestPermission();
-        dummy = new DummyGpsCoordinates(this);
+        dummy = new GpsCoordinates(this);
 
         final Button camBtn = (Button) findViewById(R.id.camera_button);
         camBtn.setOnClickListener(new View.OnClickListener() {
