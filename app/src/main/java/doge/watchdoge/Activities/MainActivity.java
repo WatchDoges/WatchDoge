@@ -82,10 +82,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void gpsPicture(){
-        Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
-        ImageView img = (ImageView)findViewById(R.id.imageView);
-        img.setImageBitmap(tmp);
-        String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+        try {
+            Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setImageBitmap(tmp);
+            String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+        }
+        catch(Exception e){
+
+        }
     }
 
     private void requestPermission(){
