@@ -20,6 +20,7 @@ public class GpsCoordinates {
     private static LocationManager locationManager;
     private static LocationListener locationListener;
     private static String locationProvider;
+    private static float MAX_ACCURACY = 20;
 
     private static Pair<Double, Double> gpsCoords;
     private static float gpsAccuracy = 0;
@@ -32,12 +33,13 @@ public class GpsCoordinates {
 
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-                // execute if accuracy of new location is not 0.0
+                // Execute if-statement, if accuracy of new location is not 0.0
                 // and less(/better) than current accuracy
                 // or if age of coordinates is more than 5s
-                if((location.getAccuracy()>(float)0.0 && location.getAccuracy()<gpsAccuracy)
-                        || ((Calendar.getInstance().getTimeInMillis()-gpsAge)>5000)){
-                    gpsCoords = new Pair<Double, Double>(location.getLatitude(),location.getLongitude());
+                if((location.getAccuracy()>(float)0.0 && location.getAccuracy()<MAX_ACCURACY
+                        && (Calendar.getInstance().getTimeInMillis()-location.getTime())<5000)
+                                || gpsAccuracy==(float)0.0){
+                    gpsCoords = new Pair<Double, Double>(location.getLatitude(), location.getLongitude());
                     gpsAccuracy = location.getAccuracy();
                     gpsAge = location.getTime();
                 }
@@ -48,16 +50,22 @@ public class GpsCoordinates {
                 if (provider.equals(locationManager.GPS_PROVIDER)){
                     if(status == LocationProvider.AVAILABLE && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
                         locationProvider = provider;
+                        resetListener();
                     }
-                    else if((status == LocationProvider.TEMPORARILY_UNAVAILABLE || status == LocationProvider.OUT_OF_SERVICE) && locationProvider.equals(locationManager.GPS_PROVIDER)){
+                    else if((status == LocationProvider.TEMPORARILY_UNAVAILABLE
+                            || status == LocationProvider.OUT_OF_SERVICE)
+                                    && locationProvider.equals(locationManager.GPS_PROVIDER)){
                         locationProvider = locationManager.NETWORK_PROVIDER;
+                        resetListener();
                     }
                 }
                 else if (provider.equals(locationManager.NETWORK_PROVIDER)){
                     if(status == LocationProvider.AVAILABLE && locationProvider.equals(locationManager.GPS_PROVIDER)){
+                        // Nothing to do, better accuracy is already used
                     }
                     else if((status == LocationProvider.TEMPORARILY_UNAVAILABLE || status == LocationProvider.OUT_OF_SERVICE) && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
                         locationProvider = locationManager.GPS_PROVIDER;
+                        resetListener();
                     }
                 }
             }
@@ -66,6 +74,7 @@ public class GpsCoordinates {
             public void onProviderEnabled(String provider) {
                 if(provider.equals(locationManager.GPS_PROVIDER) && locationProvider.equals(locationManager.NETWORK_PROVIDER)){
                     locationProvider = locationManager.GPS_PROVIDER;
+                    resetListener();
                 }
                 else if(provider.equals(locationManager.NETWORK_PROVIDER) && locationProvider.equals(locationManager.GPS_PROVIDER)){
                     // Nothing to do, better accuracy is already used
@@ -76,9 +85,11 @@ public class GpsCoordinates {
             public void onProviderDisabled(String provider) {
                 if(provider.equals(locationManager.GPS_PROVIDER)){
                     locationProvider = locationManager.NETWORK_PROVIDER;
+                    resetListener();
                 }
                 else if(provider.equals(locationManager.NETWORK_PROVIDER)){
                     locationProvider = locationManager.GPS_PROVIDER;
+                    resetListener();
                 }
             }
         };
@@ -97,9 +108,14 @@ public class GpsCoordinates {
         else throw new SecurityException("Failure at permission request");
     }
 
+    private void resetListener(){
+        locationManager.removeUpdates(locationListener);
+        locationManager.requestLocationUpdates(locationProvider, 1000, 5, locationListener);
+    }
+
     public static Pair<Double, Double> getGPS() {
         //DEBUG ************
-        boolean debug = true;
+        boolean debug = false;
         if(debug){
             try{
                 sleep(1000);
@@ -110,18 +126,19 @@ public class GpsCoordinates {
         //DEBUG END *********
         else {
             //TODO fix gpsAccuracy being constantly 0.0
-            while (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
+            /*while (gpsAccuracy == (float) 0.0 || gpsAccuracy > MAX_ACCURACY) {
                 try{
                     sleep(100);
-                    System.out.println("gpsCoords is null: "+gpsCoords==null);
-                    return gpsCoords;
+                    //return gpsCoords;
                 }
                 catch(InterruptedException ie) {
                 }
-            }
+            }*/
         }
         // Remove the listener added
-        locationManager.removeUpdates(locationListener);
+        if(gpsCoords!=null) {
+            locationManager.removeUpdates(locationListener);
+        }
         return gpsCoords;
     }
 }
