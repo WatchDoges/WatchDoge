@@ -50,9 +50,9 @@ public class GpsCoordinates {
 
         //selfcheck if has permission
         int permissionCheck = ContextCompat.checkSelfPermission(context,
-                Manifest.permission.WRITE_CALENDAR);
+                Manifest.permission.ACCESS_FINE_LOCATION);
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-            Looper.prepare();
+            //Looper.prepare();
             locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
         }
         else if(permissionCheck == PackageManager.PERMISSION_DENIED){
@@ -66,13 +66,14 @@ public class GpsCoordinates {
         boolean debug = true;
         if(debug){
             try{
-                sleep(1000*5);
+                sleep(1000);
             }
             catch(InterruptedException ie) {
             }
         }
         //DEBUG END *********
         else {
+            //TODO fix gpsAccuracy being constantly 0.0
             while (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
                 try{
                     sleep(100);
