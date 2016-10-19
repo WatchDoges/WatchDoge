@@ -21,9 +21,9 @@ public class DummyGpsCoordinates {
         }
         else {
             if (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
-                return gpsCoords;
+                return null;
             }
-            return null;
+            return gpsCoords;
         }
     }
 }
