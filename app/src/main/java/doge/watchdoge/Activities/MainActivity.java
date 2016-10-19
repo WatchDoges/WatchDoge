@@ -25,6 +25,7 @@ import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.externalsenders.ISender;
 import doge.watchdoge.gpsgetter.DummyGpsCoordinates;
+import doge.watchdoge.gpsgetter.GpsCoordinates;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -38,11 +39,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Check for permissions and request as necessary
         requestPermission();
 
-        DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
-        Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
-        ImageView img = (ImageView)findViewById(R.id.imageView);
-        img.setImageBitmap(tmp);
-        String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+        final Button camBtn = (Button) findViewById(R.id.camera_button);
+        camBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                gpsPicture();
+            }
+        });
 
         final Button button = (Button) findViewById(R.id.send_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     }
 
+    private void gpsPicture(){
+        DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
+        Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
+        ImageView img = (ImageView)findViewById(R.id.imageView);
+        img.setImageBitmap(tmp);
+        String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+    }
+
     private void requestPermission(){
         // Make an array for all the permissions that may be needed
         String perm[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
 
         if(requesting.length>0){
-            ActivityCompat.requestPermissions(this.getParent(), requesting, requestGranted);
+            ActivityCompat.requestPermissions(this, requesting, requestGranted);
         }
     }
 
