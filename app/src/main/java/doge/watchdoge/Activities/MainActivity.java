@@ -30,6 +30,7 @@ import doge.watchdoge.gpsgetter.GpsCoordinates;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final int requestGranted = 1;
+    private GpsCoordinates dummy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Check for permissions and request as necessary
         requestPermission();
+        dummy = new GpsCoordinates(this);
 
         final Button camBtn = (Button) findViewById(R.id.camera_button);
         camBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
+                Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_LONG);
+                t.show();
                 gpsPicture();
             }
         });
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void gpsPicture(){
-        DummyGpsCoordinates dummy = new DummyGpsCoordinates(this);
         Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
         ImageView img = (ImageView)findViewById(R.id.imageView);
         img.setImageBitmap(tmp);
@@ -97,18 +100,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             if(permissionCheckResult[i]== PackageManager.PERMISSION_DENIED) denied++;
         }
 
-        // The permissions that actually need a request is stored here
-        String requesting[] = new String[denied];
-        denied=0;
-        for(int i=0;i<perm.length;i++) {
-            if(permissionCheckResult[i]==PackageManager.PERMISSION_DENIED){
-                requesting[denied] = perm[i];
-                denied++;
+        if(denied!=0) {
+            // The permissions that actually need a request is stored here
+            String requesting[] = new String[denied];
+            denied = 0;
+            for (int i = 0; i < perm.length; i++) {
+                if (permissionCheckResult[i] == PackageManager.PERMISSION_DENIED) {
+                    requesting[denied] = perm[i];
+                    denied++;
+                }
             }
-        }
 
-        if(requesting.length>0){
-            ActivityCompat.requestPermissions(this, requesting, requestGranted);
+            if (requesting.length > 0) {
+                ActivityCompat.requestPermissions(this, requesting, requestGranted);
+            }
         }
     }
 
@@ -123,15 +128,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // Flash toast whether the permissions have been granted or not
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast t = new Toast(this.getApplicationContext());
-                    t.setDuration(Toast.LENGTH_LONG);
-                    t.setText("Permission granted for location data");
+                    Toast t = Toast.makeText(this.getApplicationContext(),"Permission granted for location data",Toast.LENGTH_LONG);
                     t.show();
                 }
                 else {
-                    Toast t = new Toast(this.getApplicationContext());
-                    t.setDuration(Toast.LENGTH_LONG);
-                    t.setText("Permission denied for location data");
+                    Toast t = Toast.makeText(this.getApplicationContext(),"Permission denied for location data",Toast.LENGTH_LONG);
                     t.show();
                 }
                 return;
