@@ -15,9 +15,15 @@ public class DummyGpsCoordinates {
     }
 
     public static Pair<Double, Double> getGPS() {
-        if(gpsAccuracy == (float)0.0 || gpsAccuracy > (float)20.0){
+        boolean debug = true;
+        if(debug) {
             return gpsCoords;
         }
-        return null;
+        else {
+            if (gpsAccuracy == (float) 0.0 || gpsAccuracy > (float) 20.0) {
+                return gpsCoords;
+            }
+            return null;
+        }
     }
 }
