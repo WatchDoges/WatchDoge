@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         final Button camBtn = (Button) findViewById(R.id.camera_button);
         camBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_LONG);
+                // DEBUG
+                Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_SHORT);
                 t.show();
+                // DEBUG END
                 gpsPicture();
             }
         });
@@ -135,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     Toast t = Toast.makeText(this.getApplicationContext(),"Permission denied for location data",Toast.LENGTH_LONG);
                     t.show();
                 }
+                // DEBUG END
                 return;
             }
 
