@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 ActivityCompat.requestPermissions(this, requesting, requestGranted);
             }
         }
+        else{
+            dummy = new GpsCoordinates(this);
+        }
     }
 
     @Override
