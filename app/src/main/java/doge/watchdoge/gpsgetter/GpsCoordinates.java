@@ -95,14 +95,16 @@ public class GpsCoordinates {
         };
 
         //selfcheck if has permission
-        int permissionCheck = ContextCompat.checkSelfPermission(context,
+        int permissionCheckFine = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(permissionCheckFine == PackageManager.PERMISSION_GRANTED && permissionCheckCoarse == PackageManager.PERMISSION_GRANTED){
             //Looper.prepare();
             locationManager.requestLocationUpdates(locationProvider, 1000, 5, locationListener);
             //(locationProvider, 0, 0, locationListener);
         }
-        else if(permissionCheck == PackageManager.PERMISSION_DENIED){
+        else if(permissionCheckFine == PackageManager.PERMISSION_DENIED || permissionCheckCoarse == PackageManager.PERMISSION_DENIED){
             throw new SecurityException("No permission to use GPS");
         }
         else throw new SecurityException("Failure at permission request");
