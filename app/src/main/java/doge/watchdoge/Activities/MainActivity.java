@@ -13,7 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.File;
@@ -34,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private DummyGpsCoordinates dummy;
     HashMap<String, Object> hm = new HashMap<String, Object>();
-    View v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         final Button button = (Button) findViewById(R.id.send_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                gpsPicture();
+                gpsPicture(v);
 
-                hm.put("title","Email Title, custom.");
-                hm.put("message","Email message comes here. Very nice indeed.");
+                RadioGroup radioGroup = (RadioGroup)findViewById(R.id.radioGroup1);
+                RadioButton radioButton = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+
+                hm.put("title", "(" + radioButton.getText() + ") " + ((EditText)findViewById(R.id.title_field)).getText());
+                hm.put("message", ((EditText)findViewById(R.id.desc_field)).getText());
 
                 ArrayList<String> list = new ArrayList<>();
                 list.add("miroeklu@abo.fi");
@@ -66,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Uri path = Uri.fromFile(filelocation);
                 Uri path2 = Uri.fromFile(filelocation1);
 
-                uris.add(path);
                 uris.add(path2);
+                uris.add(path);
 
                 hm.put("attachments",uris);
 
@@ -81,8 +86,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     }
 
-    private void gpsPicture(){
+    private void gpsPicture(View v){
         try {
+
+            Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_SHORT);
+            t.show();
 
             Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
             ImageView img = (ImageView) findViewById(R.id.imageView);
