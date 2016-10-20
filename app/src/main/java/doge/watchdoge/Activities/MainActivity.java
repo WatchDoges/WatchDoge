@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Check for permissions and request as necessary
         requestPermission();
-        dummy = new GpsCoordinates(this);
 
         final Button camBtn = (Button) findViewById(R.id.camera_button);
         camBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast t = Toast.makeText(this.getApplicationContext(),"Permission granted for location data",Toast.LENGTH_LONG);
                     t.show();
+                    dummy = new GpsCoordinates(this);
                 }
                 else {
                     Toast t = Toast.makeText(this.getApplicationContext(),"Permission denied for location data",Toast.LENGTH_LONG);
