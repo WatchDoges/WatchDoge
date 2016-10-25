@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private GpsCoordinates dummy;
-    HashMap<String, Object> hm = new HashMap<String, Object>();
-    ArrayList<Uri> uris = new ArrayList<>();
+    //HashMap<String, Object> hm = new HashMap<String, Object>();
+    public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,45 +43,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Check for permissions and request as necessary
         requestPermission();
-
-        final Button camBtn = (Button) findViewById(R.id.camera_button);
-        camBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                // DEBUG
-                Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_SHORT);
-                t.show();
-                // DEBUG END
-                gpsPicture();
-            }
-        });
-
-        final Button button = (Button) findViewById(R.id.send_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                HashMap<String, Object> hm = new HashMap<String, Object>();
-                hm.put("title","Email Title, custom.");
-                hm.put("message","Email message comes here. Very nice indeed.");
-
-                ArrayList<String> list = new ArrayList<>();
-                list.add("miroeklu@abo.fi");
-                list.add("miroeklu@gmail.com");
-                hm.put("receivers",list);
-
-                ArrayList<Uri> uris = new ArrayList<>();
-                File path1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                File filelocation = new File(path1, "gpspicture.png");
-                Uri path = Uri.fromFile(filelocation);
-                uris.add(path);
-                hm.put("attachments",uris);
-
-                Intent i = EmailSender.getIntent(hm);
-                startActivity(Intent.createChooser(i, "Send mail..."));
-
-            }
-        });
-
-        //example of how to use CreateGPSPicture
-
     }
 
     private void gpsPicture(){
@@ -89,14 +50,48 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(tmp);
-            Uri newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+            String gpspicname = "gpspicture";
+            Uri newName = ImageConverters.bitmapToPNG(tmp, gpspicname);
+            updateUrisHashmap(gpspicname, newName);
         }
         catch(Exception e){
-
+            e.printStackTrace();
+            System.out.println("Creating GPS Picture failed.");
         }
     }
 
+    private void updateUrisHashmap(String key, Uri value){
+        //If a GPS Picture already exists, remove it first.
+        if (MainActivity.uris.containsKey(key))
+            MainActivity.uris.remove(key);
+        //Then, place the current gps picture in the HashMap<String, Uri> uris.
+        MainActivity.uris.put(key,value);
+    }
+
+
+    public void sendButtonClick(View v){
+        HashMap<String, Object> hm = new HashMap<String, Object>();
+        hm.put("title","Email Title, custom.");
+        hm.put("message","Email message comes here. Very nice indeed.");
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("miroeklu@abo.fi");
+        list.add("miroeklu@gmail.com");
+        hm.put("receivers",list);
+
+        ArrayList<Uri> onlyUris = new ArrayList<>(MainActivity.uris.values());
+        hm.put("attachments", onlyUris);
+
+        Intent i = EmailSender.getIntent(hm);
+        startActivity(Intent.createChooser(i, "Send mail..."));
+    }
+
     public void cameraButtonClick(View v) {
+        //DEBUG START
+        Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_SHORT);
+        t.show();
+        // DEBUG END
+        gpsPicture();
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -109,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ImageConverters.bitmapToPNG(imageBitmap, "problempicture");
+            String probpicname = "problempicture";
+            Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
+            updateUrisHashmap(probpicname, probpicuri);
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(imageBitmap);
         }
