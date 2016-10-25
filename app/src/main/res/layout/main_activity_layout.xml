@@ -28,8 +28,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.05"
-                android:id="@+id/radioGroup1">
+                android:layout_weight="0.05">
 
                 <RadioButton
                     android:text="Your Apartment"
@@ -53,8 +52,7 @@
                 android:ems="10"
                 android:id="@+id/title_field"
                 android:hint="Add title"
-                android:layout_weight="0.05"
-                />
+                android:layout_weight="0.05"/>
 
             <EditText
                 android:layout_width="match_parent"
