@@ -1,6 +1,7 @@
 package doge.watchdoge.converters;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -13,11 +14,12 @@ import java.io.IOException;
 
 public class ImageConverters {
 
-    public static String bitmapToPNG(Bitmap bm, String filename){
+    public static Uri bitmapToPNG(Bitmap bm, String filename){
         FileOutputStream out = null;
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String newFileName = filename + ".png";
         try {
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File file = new File(path, filename + ".png");
+            File file = new File(path, newFileName);
             out = new FileOutputStream(file);
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
@@ -26,7 +28,13 @@ public class ImageConverters {
             try {
                 if (out != null) {
                     out.close();
-                    return filename+".png";
+                    try {
+                        File filelocation = new File(path, newFileName);
+                        return Uri.fromFile(filelocation);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -34,24 +42,6 @@ public class ImageConverters {
             }
         }
         return null;
-    }
-
-    public static void bitmapToJPEG(Bitmap bm, String filename){
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filename);
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 }
