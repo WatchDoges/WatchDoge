@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private DummyGpsCoordinates dummy;
     HashMap<String, Object> hm = new HashMap<String, Object>();
+    ArrayList<Uri> uris = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Bitmap tmp = createGPSPicture.CreateGPSPictue(dummy);
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(tmp);
-            String newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
+            Uri newName = ImageConverters.bitmapToPNG(tmp, "gpspicture");
         }
         catch(Exception e){
 
@@ -113,13 +114,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ImageConverters.bitmapToPNG(imageBitmap, "problempicture");
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(imageBitmap);
-
         }
     }
 
