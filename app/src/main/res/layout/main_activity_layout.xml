@@ -20,7 +20,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05">
+            android:layout_weight="0.05"
+            android:id="@+id/radioGroup1">
 
             <RadioButton
                 android:text="Your Apartment"

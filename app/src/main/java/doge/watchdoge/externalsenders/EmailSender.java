@@ -21,33 +21,6 @@ public class EmailSender extends GeneralSender{
     @Override
     public boolean send(){
         return false;
-        //System.out.println("Attempting to send email...");
-        //if(parentView==null || information==null){
-        //    System.out.println("Failed to send email. Information and/or ParentView has not been provided.");
-        //    return false;
-        //}
-        //Intent i = new Intent(Intent.ACTION_SEND);
-        //i.setType("message/rfc822");
-        //for(String receiver : this.receivers) {
-        //    i.putExtra(Intent.EXTRA_EMAIL, new String[]{receiver});
-        //}
-        //i.putExtra(Intent.EXTRA_SUBJECT, "Auto-Generated Title");
-        //i.putExtra(Intent.EXTRA_TEXT, "This is a test message");
-        //for(File file : this.attachments) {
-         //   Uri uri = Uri.fromFile(file);
-        //    i.putExtra(Intent.EXTRA_STREAM, uri);
-        //}
-
-        //try {
-        //    System.out.println("Trying to start activity...");
-        //    //startActivity(Intent.createChooser(i, "Send mail..."));
-        //    System.out.println("Succeeded in switching activity?");
-        //    return true;
-        //} catch (Exception ex) {
-        //    ex.printStackTrace();
-        //    System.out.println("ERROR when sending email!");
-        //    return false;
-        //}
     }
 
     public static Intent getIntent(HashMap<String, Object> info){
@@ -59,10 +32,15 @@ public class EmailSender extends GeneralSender{
         Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
         i.setType("message/rfc822");
 
+        String reportType = "";
+        if(info.containsKey("report_type")){
+            reportType = (String)info.get("report_type");
+        }
+
         if(info.containsKey("title")){
-            i.putExtra(Intent.EXTRA_SUBJECT, info.get("title").toString());
+            i.putExtra(Intent.EXTRA_SUBJECT, "(" + reportType + ") " + info.get("title").toString());
         } else {
-            i.putExtra(Intent.EXTRA_SUBJECT, "PLACEHOLDER TITLE");
+            i.putExtra(Intent.EXTRA_SUBJECT, "(" + reportType + ") " + "PLACEHOLDER TITLE");
         }
 
         if(info.containsKey("receivers")){
@@ -76,8 +54,8 @@ public class EmailSender extends GeneralSender{
             i.putExtra(Intent.EXTRA_EMAIL, new String[]{});
         }
 
-        if(info.containsKey("message")){
-            String msg = info.get("message").toString();
+        if(info.containsKey("description")){
+            String msg = info.get("description").toString();
             i.putExtra(Intent.EXTRA_TEXT, msg);
         } else {
             i.putExtra(Intent.EXTRA_TEXT, "Placeholder");
