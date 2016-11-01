@@ -13,7 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.File;
@@ -33,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private GpsCoordinates dummy;
-    //HashMap<String, Object> hm = new HashMap<String, Object>();
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
 
     @Override
@@ -70,18 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
     public void sendButtonClick(View v){
-        HashMap<String, Object> hm = new HashMap<String, Object>();
-        hm.put("title","Email Title, custom.");
-        hm.put("message","Email message comes here. Very nice indeed.");
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("miroeklu@abo.fi");
-        list.add("miroeklu@gmail.com");
-        hm.put("receivers",list);
-
-        ArrayList<Uri> onlyUris = new ArrayList<>(MainActivity.uris.values());
-        hm.put("attachments", onlyUris);
-
+        HashMap<String, Object> hm = createInformationHashMap();
         Intent i = EmailSender.getIntent(hm);
         startActivity(Intent.createChooser(i, "Send mail..."));
     }
@@ -110,6 +101,49 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(imageBitmap);
         }
+    }
+
+    private HashMap<String, Object> createInformationHashMap(){
+        HashMap<String, Object> hm = new HashMap<String, Object>();
+        CharSequence reporttype = findReportTypeFromRadioGroup();
+        CharSequence title = ((EditText)findViewById(R.id.title_field)).getText();
+        CharSequence description = ((EditText)findViewById(R.id.desc_field)).getText();
+
+        if (reporttype==null || reporttype=="") hm.put("report_type","Unspecified Report Type");
+        else hm.put("report_type", reporttype);
+
+        if (title==null || title=="") hm.put("title", "Unspecified Title");
+        else hm.put("title", title);
+
+        if (description==null || description=="") hm.put("description", "Unspecified Description");
+        else hm.put("description", description);
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("PLACEHOLDER_NOSPAM@wudifuqq.fi");
+        hm.put("receivers",list);
+
+        ArrayList<Uri> onlyUris = new ArrayList<>(MainActivity.uris.values());
+        hm.put("attachments", onlyUris);
+        return hm;
+    }
+
+    private CharSequence findReportTypeFromRadioGroup() {
+        Object possibleRadioGroupObject = findViewById(R.id.radioGroup1);
+        if (possibleRadioGroupObject != null){
+            RadioGroup privatePublicRadioGroup = (RadioGroup) possibleRadioGroupObject;
+            Integer possibleID = privatePublicRadioGroup.getCheckedRadioButtonId();
+
+            if (possibleID != null && possibleID != -1) {
+                Object possibleRadioButtonObject = findViewById(possibleID);
+                if (possibleRadioButtonObject != null) {
+                    RadioButton privatePublicButton = (RadioButton) possibleRadioButtonObject;
+                    CharSequence text = privatePublicButton.getText();
+                    if (text != null)
+                        return text;
+                }
+            }
+        }
+        return "";
     }
 
     private void requestPermission(){
