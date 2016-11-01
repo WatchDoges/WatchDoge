@@ -15,9 +15,9 @@ import java.util.concurrent.ExecutionException;
 
 public class createGPSPicture {
 
-    public static Bitmap CreateGPSPictue(GpsCoordinates input){
+    public static Bitmap CreateGPSPictue(Pair<Double, Double> coordinates){
         //Pair<Double, Double> coordinates = Pair.create(60.457027 ,2022.283202);
-        Pair<Double, Double> coordinates = input.getGPS();
+        //Pair<Double, Double> coordinates = input.getGPS();
         String imageUrl;
         if(coordinates==null || coordinates.first == null || coordinates.second == null){
             System.out.println("Using dummy coordinates (failed to find actual coordinates!)");
