@@ -5,46 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:fillViewport="true"
-        android:isScrollContainer="true">
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:weightSum="1">
+
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:id="@+id/radioGroup1">
+
+            <RadioButton
+                android:text="Your Apartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/private_button"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="Public Area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/public_button"
+                android:layout_weight="1" />
+        </RadioGroup>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="5dp"
-            android:weightSum="1"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <RadioGroup
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.05"
-                android:id="@+id/radioGroup1">
-
-                <RadioButton
-                    android:text="Your Apartment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/private_button"
-                    android:layout_weight="1" />
-
-                <RadioButton
-                    android:text="Public Area"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/public_button"
-                    android:layout_weight="1" />
-            </RadioGroup>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.95">
 
             <EditText
                 android:layout_width="match_parent"
@@ -53,8 +51,10 @@
                 android:ems="10"
                 android:id="@+id/title_field"
                 android:hint="Add title"
-                android:layout_weight="0.05"
-                />
+                android:layout_weight="0.1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:isScrollContainer="false" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -63,24 +63,37 @@
                 android:ems="10"
                 android:id="@+id/desc_field"
                 android:hint="Describe the problem"
-                android:layout_weight="0.4"
-                android:gravity="top|center_vertical" />
+                android:layout_weight="0.9"
+                android:gravity="top|center_vertical"
+                android:ellipsize="end"
+                android:maxLines="12" />
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05">
 
             <ImageView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/logo_transp"
                 android:id="@+id/imageView"
-                android:layout_weight="0.50" />
+                android:layout_weight="0.3"
+                android:cropToPadding="true"
+                android:scaleType="centerInside"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="2dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"/>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0.1"
-                android:minHeight="50dp">
+                android:layout_weight="0.7"
+                android:layout_gravity="right">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -91,26 +104,26 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimary"
                     android:text="Camera"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@android:color/background_light" />
+                    android:textColor="@android:color/background_light"
+                    android:layout_gravity="right"
+                    android:layout_margin="2dp" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/send_button"
                     android:onClick="sendButtonClick"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="right"
                     android:background="@color/colorPrimary"
                     android:backgroundTint="@color/colorPrimary"
                     android:layout_weight="0.10"
                     android:text="Send"
                     android:textColor="@android:color/background_light"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp" />
+                    android:layout_margin="2dp" />
 
             </LinearLayout>
+        </GridLayout>
 
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+
 </RelativeLayout>

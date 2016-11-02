@@ -5,12 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,25 +55,47 @@
                 android:ems="10"
                 android:id="@+id/desc_field"
                 android:hint="Describe the problem"
-                android:layout_weight="0.4"
+                android:layout_weight="0.9"
                 android:gravity="top|center_vertical" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/logo_transp"
-                android:id="@+id/imageView"
-                android:layout_weight="0.45"/>
-
-            <LinearLayout
+            <GridLayout
                 android:orientation="horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.1"
                 android:minHeight="17dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:columnCount="4">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/logo_transp"
+                    android:id="@+id/imageView"
+                    android:layout_weight="0.10"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_button"
+                    android:onClick="sendButtonClick"
+                    android:background="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_weight="0.10"
+                    android:text="Send"
+                    android:textColor="@android:color/background_light"
+                    android:layout_margin="2dp"
+                    android:layout_row="0"
+                    android:layout_column="3"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="left" />
 
                 <Button
                     android:layout_width="wrap_content"
@@ -89,25 +106,13 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimary"
                     android:text="Camera"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@android:color/background_light" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/send_button"
-                    android:onClick="sendButtonClick"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:layout_weight="0.10"
-                    android:text="Send"
                     android:textColor="@android:color/background_light"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp" />
-            </LinearLayout>
+                    android:layout_margin="2dp"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="right" />
+            </GridLayout>
 
         </LinearLayout>
-    </ScrollView>
 </RelativeLayout>
