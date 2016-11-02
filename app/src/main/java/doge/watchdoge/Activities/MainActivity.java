@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             gpscoordinates = new Pair<>(latitude, longitude );
             Toast t = Toast.makeText(this.getApplicationContext(),"new location found, accuracy: "+mLastLocation.getAccuracy(),Toast.LENGTH_LONG);
             t.show();
-            gpsPicture();
+            //gpsPicture();
 
 
         } else {
