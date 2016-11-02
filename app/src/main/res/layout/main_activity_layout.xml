@@ -83,7 +83,10 @@
                 android:cropToPadding="true"
                 android:scaleType="centerInside"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="2dp" />
+                android:layout_margin="2dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"/>
 
             <LinearLayout
                 android:orientation="vertical"
