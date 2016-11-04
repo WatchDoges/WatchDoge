@@ -125,8 +125,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void requestPermission(){
         // Make an array for all the permissions that may be needed
-        String perm[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
+        String perm[] = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.WRITE_CONTACTS,
+        };
 
         // Set size to how many permissions you want to request
         // The result of permission requests listed in perm[] is stored here
