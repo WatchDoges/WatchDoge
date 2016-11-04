@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -26,7 +27,7 @@ public class GpsCoordinates {
     private static float gpsAccuracy = 0;
     private long gpsAge = 0;
 
-    public GpsCoordinates(Context context){
+    public GpsCoordinates(final Context context){
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Use GPS location data
         locationProvider = LocationManager.GPS_PROVIDER;
@@ -42,6 +43,10 @@ public class GpsCoordinates {
                     gpsCoords = new Pair<Double, Double>(location.getLatitude(), location.getLongitude());
                     gpsAccuracy = location.getAccuracy();
                     gpsAge = location.getTime();
+                    Toast t = Toast.makeText(context.getApplicationContext(),
+                            "Location found with accuracy "+gpsAccuracy+"m",
+                            Toast.LENGTH_SHORT);
+                    t.show();
                 }
             }
 
@@ -95,14 +100,16 @@ public class GpsCoordinates {
         };
 
         //selfcheck if has permission
-        int permissionCheck = ContextCompat.checkSelfPermission(context,
+        int permissionCheckFine = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(permissionCheckFine == PackageManager.PERMISSION_GRANTED && permissionCheckCoarse == PackageManager.PERMISSION_GRANTED){
             //Looper.prepare();
             locationManager.requestLocationUpdates(locationProvider, 1000, 5, locationListener);
             //(locationProvider, 0, 0, locationListener);
         }
-        else if(permissionCheck == PackageManager.PERMISSION_DENIED){
+        else if(permissionCheckFine == PackageManager.PERMISSION_DENIED || permissionCheckCoarse == PackageManager.PERMISSION_DENIED){
             throw new SecurityException("No permission to use GPS");
         }
         else throw new SecurityException("Failure at permission request");

@@ -1,5 +1,6 @@
 package doge.watchdoge.creategpspicture;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.Pair;
 
@@ -14,11 +15,19 @@ import java.util.concurrent.ExecutionException;
 
 public class createGPSPicture {
 
-    public static Bitmap CreateGPSPictue(DummyGpsCoordinates dummy){
+    public static Bitmap CreateGPSPictue(Pair<Double, Double> coordinates){
         //Pair<Double, Double> coordinates = Pair.create(60.457027 ,2022.283202);
-        Pair<Double, Double> coordinates = dummy.getGPS();
-        String imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
-                coordinates.first + ",%20" +coordinates.second;
+        //Pair<Double, Double> coordinates = input.getGPS();
+        String imageUrl;
+        if(coordinates==null || coordinates.first == null || coordinates.second == null){
+            System.out.println("Using dummy coordinates (failed to find actual coordinates!)");
+            Pair<Double, Double> dummyCoordinates = DummyGpsCoordinates.getGPS();
+            imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
+                    dummyCoordinates.first + ",%20" + dummyCoordinates.second;
+        } else {
+            imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
+                    coordinates.first + ",%20" +coordinates.second;
+        }
 
         Bitmap picture = null;
         try {

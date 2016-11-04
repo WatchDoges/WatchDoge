@@ -23,18 +23,29 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Close"
+                android:text="Resend"
+                android:onClick="resendButtonClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/close_button"
-                android:layout_weight="0.5" />
+                android:id="@+id/resend_button"
+                android:layout_weight="0.6" />
 
             <Button
                 android:text="New report"
+                android:onClick="newReportButtonClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/new_button"
-                android:layout_weight="0.38" />
+                android:layout_weight="0.6" />
+
+            <Button
+                android:text="Close"
+                android:onClick="closeButtonClick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/close_button"
+                android:layout_weight="0.6" />
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
