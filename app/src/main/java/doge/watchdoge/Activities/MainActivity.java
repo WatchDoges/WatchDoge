@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
-    //private GpsCoordinates dummy;
+    private GpsCoordinates dummy;
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
 
@@ -77,35 +77,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             buildGoogleApiClient();
 
             createLocationRequest();
+        } else {
+            togglePeriodicLocationUpdates();
+            dummy = new GpsCoordinates(this);
         }
 
     }
 
-    private void gpsPicture(){
-        try {
-            Bitmap tmp = createGPSPicture.CreateGPSPictue(gpscoordinates);
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(tmp);
-            String gpspicname = "gpspicture";
-            Uri newName = ImageConverters.bitmapToPNG(tmp, gpspicname);
-            updateUrisHashmap(gpspicname, newName);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Creating GPS Picture failed.");
-        }
-    }
-
-    private void updateUrisHashmap(String key, Uri value){
+    private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
         if (MainActivity.uris.containsKey(key))
             MainActivity.uris.remove(key);
         //Then, place the current gps picture in the HashMap<String, Uri> uris.
-        MainActivity.uris.put(key,value);
+        MainActivity.uris.put(key, value);
     }
 
 
-    public void sendButtonClick(View v){
+    public void sendButtonClick(View v) {
         HashMap<String, Object> hm = createInformationHashMap();
         Intent i = EmailSender.getIntent(hm);
         startActivity(Intent.createChooser(i, "Send mail..."));
@@ -113,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void cameraButtonClick(View v) {
         //DEBUG START
-        Toast t = Toast.makeText(v.getContext(),"Fetching GPS data", Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
         t.show();
         // DEBUG END
         gpsPicture();
@@ -137,24 +125,26 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
     }
 
-    private HashMap<String, Object> createInformationHashMap(){
+    private HashMap<String, Object> createInformationHashMap() {
         HashMap<String, Object> hm = new HashMap<String, Object>();
         CharSequence reporttype = findReportTypeFromRadioGroup();
-        CharSequence title = ((EditText)findViewById(R.id.title_field)).getText();
-        CharSequence description = ((EditText)findViewById(R.id.desc_field)).getText();
+        CharSequence title = ((EditText) findViewById(R.id.title_field)).getText();
+        CharSequence description = ((EditText) findViewById(R.id.desc_field)).getText();
 
-        if (reporttype==null || reporttype=="") hm.put("report_type","Unspecified Report Type");
+        if (reporttype == null || reporttype == "")
+            hm.put("report_type", "Unspecified Report Type");
         else hm.put("report_type", reporttype);
 
-        if (title==null || title=="") hm.put("title", "Unspecified Title");
+        if (title == null || title == "") hm.put("title", "Unspecified Title");
         else hm.put("title", title);
 
-        if (description==null || description=="") hm.put("description", "Unspecified Description");
+        if (description == null || description == "")
+            hm.put("description", "Unspecified Description");
         else hm.put("description", description);
 
         ArrayList<String> list = new ArrayList<>();
         list.add("PLACEHOLDER_NOSPAM@wudifuqq.fi");
-        hm.put("receivers",list);
+        hm.put("receivers", list);
 
         ArrayList<Uri> onlyUris = new ArrayList<>(MainActivity.uris.values());
         hm.put("attachments", onlyUris);
@@ -163,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private CharSequence findReportTypeFromRadioGroup() {
         Object possibleRadioGroupObject = findViewById(R.id.radioGroup1);
-        if (possibleRadioGroupObject != null){
+        if (possibleRadioGroupObject != null) {
             RadioGroup privatePublicRadioGroup = (RadioGroup) possibleRadioGroupObject;
             Integer possibleID = privatePublicRadioGroup.getCheckedRadioButtonId();
 
@@ -180,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         return "";
     }
 
-    private void requestPermission(){
+    private void requestPermission() {
         // Make an array for all the permissions that may be needed
         String perm[] = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -195,12 +185,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // The result of permission requests listed in perm[] is stored here
         int permissionCheckResult[] = new int[perm.length];
         int denied = 0;
-        for(int i=0; i<perm.length;i++){
-            permissionCheckResult[i] = ContextCompat.checkSelfPermission(this.getApplicationContext(),perm[i]);
-            if(permissionCheckResult[i]== PackageManager.PERMISSION_DENIED) denied++;
+        for (int i = 0; i < perm.length; i++) {
+            permissionCheckResult[i] = ContextCompat.checkSelfPermission(this.getApplicationContext(), perm[i]);
+            if (permissionCheckResult[i] == PackageManager.PERMISSION_DENIED) denied++;
         }
 
-        if(denied!=0) {
+        if (denied != 0) {
             // The permissions that actually need a request is stored here
             String requesting[] = new String[denied];
             denied = 0;
@@ -214,8 +204,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             if (requesting.length > 0) {
                 ActivityCompat.requestPermissions(this, requesting, requestGranted);
             }
-        }
-        else{
+        } else {
             //dummy = new GpsCoordinates(this);
         }
     }
@@ -231,12 +220,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // Flash toast whether the permissions have been granted or not
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast t = Toast.makeText(this.getApplicationContext(),"Permission granted for location data",Toast.LENGTH_LONG);
+                    Toast t = Toast.makeText(this.getApplicationContext(), "Permission granted for location data", Toast.LENGTH_LONG);
                     t.show();
+                    startLocationUpdates();
+                    updateLocation();
                     //dummy = new GpsCoordinates(this);
-                }
-                else {
-                    Toast t = Toast.makeText(this.getApplicationContext(),"Permission denied for location data",Toast.LENGTH_LONG);
+                } else {
+                    Toast t = Toast.makeText(this.getApplicationContext(), "Permission denied for location data", Toast.LENGTH_LONG);
                     t.show();
                 }
                 // DEBUG END
@@ -248,42 +238,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
+
+    private void gpsPicture() {
+        try {
+            Bitmap tmp;
+            if (!mRequestingLocationUpdates) {
+                tmp = createGPSPicture.CreateGPSPictue(gpscoordinates);
+            } else {
+                tmp = createGPSPicture.CreateGPSPictue(null);
+            }
+
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setImageBitmap(tmp);
+            String gpspicname = "gpspicture";
+            Uri newName = ImageConverters.bitmapToPNG(tmp, gpspicname);
+            updateUrisHashmap(gpspicname, newName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Creating GPS Picture failed.");
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        checkGoogleAPI();
-
-        // Resuming the periodic location updates
-        if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-
-    public static Pair<Double, Double> getGpscoordinates() {
-        return gpscoordinates;
     }
 
     private void updateLocation() {
@@ -294,8 +267,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
-            gpscoordinates = new Pair<>(latitude, longitude );
-            Toast t = Toast.makeText(this.getApplicationContext(),"new location found, accuracy: "+mLastLocation.getAccuracy(),Toast.LENGTH_LONG);
+            gpscoordinates = new Pair<>(latitude, longitude);
+            Toast t = Toast.makeText(this.getApplicationContext(), "new location found, accuracy: " + mLastLocation.getAccuracy(), Toast.LENGTH_LONG);
             t.show();
             //gpsPicture();
 
@@ -307,14 +280,17 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     /**
      * Method to toggle periodic location updates
-     * */
+     */
     private void togglePeriodicLocationUpdates() {
         if (!mRequestingLocationUpdates) {
 
             mRequestingLocationUpdates = true;
 
             // Starting the location updates
-            startLocationUpdates();
+            if (mGoogleApiClient != null)
+                if (mGoogleApiClient.isConnected()) {
+                    startLocationUpdates();
+                }
 
         } else {
             mRequestingLocationUpdates = false;
@@ -325,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     /**
      * Creating google api client object
-     * */
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -335,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     /**
      * Creating location request object
-     * */
+     */
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -346,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     /**
      * Method to verify google play services on the device
-     * */
+     */
     private boolean checkGoogleAPI() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int CODE = googleAPI.isGooglePlayServicesAvailable(this);
@@ -363,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     /**
      * Starting the location updates
-     * */
+     */
     protected void startLocationUpdates() {
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -413,4 +389,48 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Displaying the new location on UI
         updateLocation();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkGoogleAPI();
+
+        // Resuming the periodic location updates
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
+                startLocationUpdates();
+            }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected()) {
+                stopLocationUpdates();
+            }
+    }
+
+    public static Pair<Double, Double> getGpscoordinates() {
+        return gpscoordinates;
+    }
+
 }
