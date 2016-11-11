@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void cameraButtonClick(View v) {
         //DEBUG START
-        Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
-        t.show();
+        //Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
+        //t.show();
         // DEBUG END
 
 
@@ -221,14 +221,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // Flash toast whether the permissions have been granted or not
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast t = Toast.makeText(this.getApplicationContext(), "Permission granted for location data", Toast.LENGTH_LONG);
-                    t.show();
+                    //Toast t = Toast.makeText(this.getApplicationContext(), "Permission granted for location data", Toast.LENGTH_LONG);
+                    //t.show();
                     startLocationUpdates();
                     updateLocation();
                     //dummy = new GpsCoordinates(this);
                 } else {
-                    Toast t = Toast.makeText(this.getApplicationContext(), "Permission denied for location data", Toast.LENGTH_LONG);
-                    t.show();
+                    //Toast t = Toast.makeText(this.getApplicationContext(), "Permission denied for location data", Toast.LENGTH_LONG);
+                    //t.show();
                 }
                 // DEBUG END
                 return;
@@ -269,8 +269,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
             gpscoordinates = new Pair<>(latitude, longitude);
-            Toast t = Toast.makeText(this.getApplicationContext(), "new location found, accuracy: " + mLastLocation.getAccuracy(), Toast.LENGTH_LONG);
-            t.show();
+            //Toast t = Toast.makeText(this.getApplicationContext(), "new location found, accuracy: " + mLastLocation.getAccuracy(), Toast.LENGTH_LONG);
+            //t.show();
             //gpsPicture();
 
 
