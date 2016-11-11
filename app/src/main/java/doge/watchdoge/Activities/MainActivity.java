@@ -205,8 +205,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             if (requesting.length > 0) {
                 ActivityCompat.requestPermissions(this, requesting, requestGranted);
             }
-        } else {
-            //dummy = new GpsCoordinates(this);
+
         }
     }
 
@@ -225,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     //t.show();
                     startLocationUpdates();
                     updateLocation();
-                    //dummy = new GpsCoordinates(this);
                 } else {
                     //Toast t = Toast.makeText(this.getApplicationContext(), "Permission denied for location data", Toast.LENGTH_LONG);
                     //t.show();
@@ -262,8 +260,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void updateLocation() {
 
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
@@ -271,11 +275,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             gpscoordinates = new Pair<>(latitude, longitude);
             //Toast t = Toast.makeText(this.getApplicationContext(), "new location found, accuracy: " + mLastLocation.getAccuracy(), Toast.LENGTH_LONG);
             //t.show();
-            //gpsPicture();
-
 
         } else {
-
+            Toast t = Toast.makeText(this.getApplicationContext(), "mLastLocation was null", Toast.LENGTH_LONG);
+            t.show();
         }
     }
 
@@ -288,10 +291,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             mRequestingLocationUpdates = true;
 
             // Starting the location updates
-            if (mGoogleApiClient != null)
-                if (mGoogleApiClient.isConnected()) {
-                    startLocationUpdates();
-                }
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) startLocationUpdates();
 
         } else {
             mRequestingLocationUpdates = false;
@@ -343,6 +343,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     protected void startLocationUpdates() {
 
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
 
@@ -394,9 +401,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onStart() {
         super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
+        if (mGoogleApiClient != null) mGoogleApiClient.connect();
     }
 
     @Override
@@ -407,9 +412,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Resuming the periodic location updates
         if (mGoogleApiClient != null)
-            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
-                startLocationUpdates();
-            }
+            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) startLocationUpdates();
     }
 
     @Override
@@ -429,9 +432,4 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 stopLocationUpdates();
             }
     }
-
-    public static Pair<Double, Double> getGpscoordinates() {
-        return gpscoordinates;
-    }
-
 }
