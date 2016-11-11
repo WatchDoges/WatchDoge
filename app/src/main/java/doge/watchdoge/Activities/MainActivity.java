@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
         t.show();
         // DEBUG END
-        gpsPicture();
+
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             updateUrisHashmap(probpicname, probpicuri);
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(imageBitmap);
+            gpsPicture();
         }
     }
 
