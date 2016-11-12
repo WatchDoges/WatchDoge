@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_menu_tys);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         // Check for permissions and request as necessary
         requestPermission();
