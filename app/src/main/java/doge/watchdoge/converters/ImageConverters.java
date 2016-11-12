@@ -15,6 +15,7 @@ import java.io.IOException;
 public class ImageConverters {
 
     public static Uri bitmapToPNG(Bitmap bm, String filename){
+
         FileOutputStream out = null;
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String newFileName = filename + ".png";
@@ -43,5 +44,4 @@ public class ImageConverters {
         }
         return null;
     }
-
 }

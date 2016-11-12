@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -88,7 +89,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     }
 
-
+    /** Input: the new name of a key value to be added to the pictures hashmap called uris
+     *  Output: Nothing.
+     *  Effect: Sets the provided URI object, that should reference an active picture, into the
+     *  uris hashmap.
+     *  Purpose: Used to track problem pictures and the gps picture of a report.
+     */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
         if (key==MainActivity.gpspicname && MainActivity.uris.containsKey(key))
@@ -98,19 +104,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
+    /** Input: The current view. Provided automatically.
+     *  Ouput: None.
+     *  Effect: Starts a new send activity (currently email) with provided information.
+     *  Also takes the app to FeedbackActivity.
+     */
     public void sendButtonClick(View v) {
         HashMap<String, Object> hm = createInformationHashMap();
         Intent i = EmailSender.getIntent(hm);
+        Intent feedbackActivityIntent = new Intent(this, FeedbackActivity.class);
+        startActivity(feedbackActivityIntent);
         startActivity(Intent.createChooser(i, "Send mail..."));
     }
 
+    /** Input: The current view. Provided automatically.
+     *  Output: None.
+     *  Effect: Takes the user to the android device's own camera application.
+     *  Returns to MainActivity upon taking a picture.
+     */
     public void cameraButtonClick(View v) {
-        //DEBUG START
         //Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
         //t.show();
-        // DEBUG END
-
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -124,9 +138,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             String probpicname = findFreshName("problempicture", MainActivity.uris);
             Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
-            updateUrisHashmap(probpicname, probpicuri);
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(imageBitmap);
+            if (probpicuri!=null)
+                updateUrisHashmap(probpicname, probpicuri);
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
     }
@@ -273,7 +288,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(tmp);
             Uri newName = ImageConverters.bitmapToPNG(tmp, MainActivity.gpspicname);
-            updateUrisHashmap(MainActivity.gpspicname, newName);
+            if(newName!=null)
+                updateUrisHashmap(MainActivity.gpspicname, newName);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Creating GPS Picture failed.");
