@@ -79,7 +79,6 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_launcher_doge"
                 android:id="@+id/imageView"
-                android:layout_weight="0.3"
                 android:cropToPadding="true"
                 android:scaleType="centerInside"
                 android:layout_gravity="center_vertical"
@@ -92,7 +91,6 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
                 android:layout_gravity="right">
 
                 <Button
