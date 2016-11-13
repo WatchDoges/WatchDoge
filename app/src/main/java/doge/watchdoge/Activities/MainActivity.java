@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -74,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Check for permissions and request as necessary
         requestPermission();
 
+        /** If there is a saved bitmap in the state, reset it. Will prevent image from disappearing
+         when changing orientation of the device*/
+        if(savedInstanceState != null) {
+            ImageView view = (ImageView) findViewById(R.id.imageView); // Get the current bitmap
+            // Restore the the bitmap to the imageView
+            view.setImageBitmap((Bitmap) savedInstanceState.getParcelable("problemPicture"));
+        }
+
         if (checkGoogleAPI()) {
 
             // Building the GoogleApi client
@@ -83,6 +92,29 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         } else {
             togglePeriodicLocationUpdates();
             dummy = new GpsCoordinates(this);
+        }
+
+    }
+
+    /**
+     * Override the onSaveInstanceState to save the bitmap of the problem picture. By saving the
+     * bitmap to the state it can later be restored in onCreate. This is needed when the runtime
+     * changes, for example, when the devices orientation changes.
+     * @param state The state in which the bitmap is changed
+     */
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        ImageView view = (ImageView) findViewById(R.id.imageView); // Get the imageView
+        try {
+            // Get current bitmap
+            Bitmap problemPicture = ((BitmapDrawable) view.getDrawable()).getBitmap();
+            // Save the bitmap in the state
+            state.putParcelable("problemPicture", problemPicture);
+        }
+        catch (ClassCastException CCE) {
+            CCE.printStackTrace();
+            System.err.print("Class cast exception");
         }
 
     }
@@ -251,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
 
             ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(tmp);
+            //img.setImageBitmap(tmp);
             String gpspicname = "gpspicture";
             Uri newName = ImageConverters.bitmapToPNG(tmp, gpspicname);
             updateUrisHashmap(gpspicname, newName);
