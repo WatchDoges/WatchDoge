@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,8 +29,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import doge.watchdoge.R;
 import doge.watchdoge.converters.ImageConverters;
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private GpsCoordinates dummy;
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
-
+    private static String gpspicname = "gpspicture";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
     private Location mLastLocation;
@@ -74,6 +77,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Check for permissions and request as necessary
         requestPermission();
 
+        /** If there is a saved bitmap in the state, reset it. Will prevent image from disappearing
+         when changing orientation of the device*/
+        if(savedInstanceState != null) {
+            ImageView view = (ImageView) findViewById(R.id.imageView); // Get the current bitmap
+            // Restore the the bitmap to the imageView
+            view.setImageBitmap((Bitmap) savedInstanceState.getParcelable("problemPicture"));
+        }
+
         if (checkGoogleAPI()) {
 
             // Building the GoogleApi client
@@ -87,28 +98,66 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     }
 
+
+    /**
+     * Override the onSaveInstanceState to save the bitmap of the problem picture. By saving the
+     * bitmap to the state it can later be restored in onCreate. This is needed when the runtime
+     * changes, for example, when the devices orientation changes.
+     * @param state The state in which the bitmap is changed
+     */
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        ImageView view = (ImageView) findViewById(R.id.imageView); // Get the imageView
+        try {
+            // Get current bitmap
+            Bitmap problemPicture = ((BitmapDrawable) view.getDrawable()).getBitmap();
+            // Save the bitmap in the state
+            state.putParcelable("problemPicture", problemPicture);
+        }
+        catch (ClassCastException CCE) {
+            CCE.printStackTrace();
+            System.err.print("Class cast exception");
+        }
+
+    }
+
+    /** Input: the new name of a key value to be added to the pictures hashmap called uris
+     *  Output: Nothing.
+     *  Effect: Sets the provided URI object, that should reference an active picture, into the
+     *  uris hashmap.
+     *  Purpose: Used to track problem pictures and the gps picture of a report.
+     */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
-        if (MainActivity.uris.containsKey(key))
+        if (key==MainActivity.gpspicname && MainActivity.uris.containsKey(key))
             MainActivity.uris.remove(key);
-        //Then, place the current gps picture in the HashMap<String, Uri> uris.
+        //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
     }
 
 
+    /** Input: The current view. Provided automatically.
+     *  Ouput: None.
+     *  Effect: Starts a new send activity (currently email) with provided information.
+     *  Also takes the app to FeedbackActivity.
+     */
     public void sendButtonClick(View v) {
         HashMap<String, Object> hm = createInformationHashMap();
         Intent i = EmailSender.getIntent(hm);
+        Intent feedbackActivityIntent = new Intent(this, FeedbackActivity.class);
+        startActivity(feedbackActivityIntent);
         startActivity(Intent.createChooser(i, "Send mail..."));
     }
 
+    /** Input: The current view. Provided automatically.
+     *  Output: None.
+     *  Effect: Takes the user to the android device's own camera application.
+     *  Returns to MainActivity upon taking a picture.
+     */
     public void cameraButtonClick(View v) {
-        //DEBUG START
         //Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
         //t.show();
-        // DEBUG END
-
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -120,13 +169,32 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String probpicname = "problempicture";
+            String probpicname = findFreshName("problempicture", MainActivity.uris);
             Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
-            updateUrisHashmap(probpicname, probpicuri);
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(imageBitmap);
+            if (probpicuri!=null)
+                updateUrisHashmap(probpicname, probpicuri);
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
+    }
+
+    /** Input: The picture name (key) that might exist in the HashMap provided.
+     *  Output: A new unique name for a problem picture.
+     *  Used to to find a fresh problempicture name before converting the BitMap to a PNG.
+     */
+    private String findFreshName(String key, HashMap<String, Uri> uris){
+        Set<String> keys = uris.keySet();
+        Integer newID = 0;
+        //If the keys are, for example. key+0, key+1 and key+2, this for-loop will push newID
+        //to 3 and return key+3. If the keys are only key+1, then key+0 will be returned since
+        //it wasn't in the set of keys.
+        for(String k : keys) {
+            String possibleNewName = key+newID.toString();
+            if(keys.contains(possibleNewName)) newID++;
+            else return possibleNewName;
+        }
+        return key+newID.toString();
     }
 
     private HashMap<String, Object> createInformationHashMap() {
@@ -251,10 +319,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
 
             ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(tmp);
-            String gpspicname = "gpspicture";
-            Uri newName = ImageConverters.bitmapToPNG(tmp, gpspicname);
-            updateUrisHashmap(gpspicname, newName);
+            //img.setImageBitmap(tmp);
+            Uri newName = ImageConverters.bitmapToPNG(tmp, MainActivity.gpspicname);
+            if(newName!=null)
+                updateUrisHashmap(MainActivity.gpspicname, newName);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Creating GPS Picture failed.");
