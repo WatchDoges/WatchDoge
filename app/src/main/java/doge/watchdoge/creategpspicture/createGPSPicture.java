@@ -18,24 +18,26 @@ public class createGPSPicture {
     public static Bitmap CreateGPSPictue(Pair<Double, Double> coordinates){
         //Pair<Double, Double> dummy = Pair.create(60.457027 ,2022.283202);
         //Pair<Double, Double> coordinates = input.getGPS();
+        String size = "640x640";
+        String marker = "http://i.imgur.com/kPtp25C.png";
         String imageUrl;
         if(coordinates==null || coordinates.first == null || coordinates.second == null){
             System.out.println("Using Android.location coordinates (googleAPI not supported or disabled!)");
             Pair<Double, Double> androidLocation =  GpsCoordinates.getGPS();
             if (androidLocation != null) {
-                imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
+                imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size="+size+"&scale=2&markers=&markers=icon:"+marker+"|" +
                         androidLocation.first + ",%20" + androidLocation.second;
             }
             else{
                 System.out.println("Using default dummy coordinates (googleAPI and android.Location not supported or disabled!)");
                 Pair<Double, Double> dummy = DummyGpsCoordinates.getGPS();
-                imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
+                imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size="+size+"&scale=2&markers=icon:"+marker+"|" +
                         dummy.first + ",%20" + dummy.second;
 
             }
 
         } else {
-            imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size=600x600&markers=color:blue|" +
+            imageUrl = "http://maps.googleapis.com/maps/api/staticmap?&size="+size+"&scale=2&markers=icon:"+marker+"|" +
                     coordinates.first + ",%20" +coordinates.second;
         }
 
