@@ -158,30 +158,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
 
-        // Crashes on rotation for some reason.
-//        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup radioGroup1, int checkedId) {
-//                boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
-//                if (isChecked) enableSendButton();
-//            }
-//        });
-//
-        //Doesn't work when a button is first selected.
-//        privateButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) enableSendButton();
-//            }
-//        });
-//
-//        publicButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) enableSendButton();
-//            }
-//        });
-
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup1, int checkedId) {
+                boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
+                if (isChecked) enableSendButton();
+            }
+        });
     }
 
     /**
