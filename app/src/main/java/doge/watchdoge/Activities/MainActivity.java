@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +45,7 @@ import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
 
+
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener {
 
@@ -52,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
     private static String gpspicname = "gpspicture";
+    private String probpicname;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    public static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 1777;
 
     private Location mLastLocation;
 
@@ -221,14 +226,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Returns to MainActivity upon taking a picture.
      */
     public void cameraButtonClick(View v) {
-        //Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
-        //t.show();
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        probpicname = findFreshName("problempicture", MainActivity.uris);
+        File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        startActivityForResult(intent, CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE);
     }
 
+    /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
+     *  Output: None.
+     *  Effect: Creates a full-sized picture from the camera, stores it with a unique name
+     *  Returns to MainActivity upon making a problem picture and initiate the creation of gpspicture.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -240,6 +249,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 updateUrisHashmap(probpicname, probpicuri);
             ImageView img = (ImageView) findViewById(R.id.imageView);
             img.setImageBitmap(imageBitmap);
+            gpsPicture();
+        }
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE)
+        {
+            //Get our saved file into a bitmap object:
+            File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
+            Bitmap bitmap = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), 1920, 1080);
+            Uri probpicuri = ImageConverters.bitmapToPNG(bitmap, probpicname);
+            if (probpicuri!=null)
+                updateUrisHashmap(probpicname, probpicuri);
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setImageBitmap(bitmap);
             gpsPicture();
         }
     }
