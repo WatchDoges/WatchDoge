@@ -149,14 +149,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
 
-        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton privateButton = (RadioButton) findViewById(R.id.private_button);
-                RadioButton publicButton = (RadioButton) findViewById(R.id.public_button);
-                boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
-                if (isChecked) enableSendButton();
-            }
-        });
+//        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                RadioButton privateButton = (RadioButton) findViewById(R.id.private_button);
+//                RadioButton publicButton = (RadioButton) findViewById(R.id.public_button);
+//                boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
+//                if (isChecked) enableSendButton();
+//            }
+//        });
     }
 
     private void enableSendButton() {
