@@ -17,6 +17,9 @@ public class FeedbackActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feedback_activity_layout);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_menu_tys);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
     public void resendButtonClick(View v){
