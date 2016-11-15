@@ -117,7 +117,9 @@
                     android:layout_weight="0.10"
                     android:text="Send"
                     android:textColor="@android:color/background_light"
-                    android:layout_margin="2dp" />
+                    android:layout_margin="2dp"
+                    android:enabled="false"
+                    android:alpha=".5" />
 
             </LinearLayout>
         </GridLayout>

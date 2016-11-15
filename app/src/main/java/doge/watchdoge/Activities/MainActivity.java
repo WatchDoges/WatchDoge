@@ -13,7 +13,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -66,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static int FATEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 5; // 10 meters
 
+    // XML component declarations
+    EditText titleField;
+    EditText descField;
+    RadioGroup radioGroup1;
+    private Button sendButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         /** If there is a saved bitmap in the state, reset it. Will prevent image from disappearing
          when changing orientation of the device*/
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             ImageView view = (ImageView) findViewById(R.id.imageView); // Get the current bitmap
             // Restore the the bitmap to the imageView
             view.setImageBitmap((Bitmap) savedInstanceState.getParcelable("problemPicture"));
@@ -96,6 +105,50 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             dummy = new GpsCoordinates(this);
         }
 
+        titleField = (EditText) findViewById(R.id.title_field);
+        descField = (EditText) findViewById(R.id.desc_field);
+        radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
+        sendButton = (Button) findViewById(R.id.send_button);
+
+        titleField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                enableSendButton();
+            }
+        });
+
+        descField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                enableSendButton();
+            }
+        });
+    }
+
+
+    private void enableSendButton() {
+        boolean enable = titleField.getText().toString().length() > 0
+                && descField.getText().toString().length() > 0
+                && radioGroup1.getCheckedRadioButtonId() != -1;
+        sendButton.setEnabled(enable);
+        if (enable) sendButton.setAlpha(1);
+        else sendButton.setAlpha(0.5f);
     }
 
 
@@ -103,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Override the onSaveInstanceState to save the bitmap of the problem picture. By saving the
      * bitmap to the state it can later be restored in onCreate. This is needed when the runtime
      * changes, for example, when the devices orientation changes.
+     *
      * @param state The state in which the bitmap is changed
      */
     @Override
@@ -114,33 +168,34 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Bitmap problemPicture = ((BitmapDrawable) view.getDrawable()).getBitmap();
             // Save the bitmap in the state
             state.putParcelable("problemPicture", problemPicture);
-        }
-        catch (ClassCastException CCE) {
+        } catch (ClassCastException CCE) {
             CCE.printStackTrace();
             System.err.print("Class cast exception");
         }
 
     }
 
-    /** Input: the new name of a key value to be added to the pictures hashmap called uris
-     *  Output: Nothing.
-     *  Effect: Sets the provided URI object, that should reference an active picture, into the
-     *  uris hashmap.
-     *  Purpose: Used to track problem pictures and the gps picture of a report.
+
+    /**
+     * Input: the new name of a key value to be added to the pictures hashmap called uris
+     * Output: Nothing.
+     * Effect: Sets the provided URI object, that should reference an active picture, into the
+     * uris hashmap.
+     * Purpose: Used to track problem pictures and the gps picture of a report.
      */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
-        if (key==MainActivity.gpspicname && MainActivity.uris.containsKey(key))
+        if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key))
             MainActivity.uris.remove(key);
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
     }
 
-
-    /** Input: The current view. Provided automatically.
-     *  Ouput: None.
-     *  Effect: Starts a new send activity (currently email) with provided information.
-     *  Also takes the app to FeedbackActivity.
+    /**
+     * Input: The current view. Provided automatically.
+     * Ouput: None.
+     * Effect: Starts a new send activity (currently email) with provided information.
+     * Also takes the app to FeedbackActivity.
      */
     public void sendButtonClick(View v) {
         HashMap<String, Object> hm = createInformationHashMap();
@@ -150,10 +205,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         startActivity(Intent.createChooser(i, "Send mail..."));
     }
 
-    /** Input: The current view. Provided automatically.
-     *  Output: None.
-     *  Effect: Takes the user to the android device's own camera application.
-     *  Returns to MainActivity upon taking a picture.
+    /**
+     * Input: The current view. Provided automatically.
+     * Output: None.
+     * Effect: Takes the user to the android device's own camera application.
+     * Returns to MainActivity upon taking a picture.
      */
     public void cameraButtonClick(View v) {
         //Toast t = Toast.makeText(v.getContext(), "Fetching GPS data", Toast.LENGTH_SHORT);
@@ -171,30 +227,31 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             String probpicname = findFreshName("problempicture", MainActivity.uris);
             Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
-            if (probpicuri!=null)
+            if (probpicuri != null)
                 updateUrisHashmap(probpicname, probpicuri);
-                ImageView img = (ImageView) findViewById(R.id.imageView);
-                img.setImageBitmap(imageBitmap);
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
     }
 
-    /** Input: The picture name (key) that might exist in the HashMap provided.
-     *  Output: A new unique name for a problem picture.
-     *  Used to to find a fresh problempicture name before converting the BitMap to a PNG.
+    /**
+     * Input: The picture name (key) that might exist in the HashMap provided.
+     * Output: A new unique name for a problem picture.
+     * Used to to find a fresh problempicture name before converting the BitMap to a PNG.
      */
-    private String findFreshName(String key, HashMap<String, Uri> uris){
+    private String findFreshName(String key, HashMap<String, Uri> uris) {
         Set<String> keys = uris.keySet();
         Integer newID = 0;
         //If the keys are, for example. key+0, key+1 and key+2, this for-loop will push newID
         //to 3 and return key+3. If the keys are only key+1, then key+0 will be returned since
         //it wasn't in the set of keys.
-        for(String k : keys) {
-            String possibleNewName = key+newID.toString();
-            if(keys.contains(possibleNewName)) newID++;
+        for (String k : keys) {
+            String possibleNewName = key + newID.toString();
+            if (keys.contains(possibleNewName)) newID++;
             else return possibleNewName;
         }
-        return key+newID.toString();
+        return key + newID.toString();
     }
 
     private HashMap<String, Object> createInformationHashMap() {
@@ -321,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ImageView img = (ImageView) findViewById(R.id.imageView);
             //img.setImageBitmap(tmp);
             Uri newName = ImageConverters.bitmapToPNG(tmp, MainActivity.gpspicname);
-            if(newName!=null)
+            if (newName != null)
                 updateUrisHashmap(MainActivity.gpspicname, newName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -483,7 +540,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Resuming the periodic location updates
         if (mGoogleApiClient != null)
-            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) startLocationUpdates();
+            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates)
+                startLocationUpdates();
     }
 
     @Override
