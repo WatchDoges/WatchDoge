@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private EditText titleField;
     private EditText descField;
     private RadioGroup radioGroup1;
+    private RadioButton privateButton;
+    private RadioButton publicButton;
     private Button sendButton;
 
     @Override
@@ -113,10 +116,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         sendButtonListenSetUp();
     }
 
+    /**
+     * Sets up listeners on the title field, description field and on the radio buttons to
+     * enable/disable the send button when there is text in the fields and a button is selected.
+     */
     private void sendButtonListenSetUp() {
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.desc_field);
         radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
+        privateButton = (RadioButton) findViewById(R.id.private_button);
+        publicButton = (RadioButton) findViewById(R.id.public_button);
         sendButton = (Button) findViewById(R.id.send_button);
 
         titleField.addTextChangedListener(new TextWatcher() {
@@ -149,16 +158,35 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
 
+        // Crashes on rotation for some reason.
 //        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                RadioButton privateButton = (RadioButton) findViewById(R.id.private_button);
-//                RadioButton publicButton = (RadioButton) findViewById(R.id.public_button);
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup1, int checkedId) {
 //                boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
 //                if (isChecked) enableSendButton();
 //            }
 //        });
+//
+        //Doesn't work when a button is first selected.
+//        privateButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) enableSendButton();
+//            }
+//        });
+//
+//        publicButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) enableSendButton();
+//            }
+//        });
+
     }
 
+    /**
+     * Enables/disables and greys out the send button.
+     */
     private void enableSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
                 && descField.getText().toString().length() > 0
