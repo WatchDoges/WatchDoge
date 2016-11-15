@@ -75,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static int DISPLACEMENT = 5; // 10 meters
 
     // XML component declarations
-    EditText titleField;
-    EditText descField;
-    RadioGroup radioGroup1;
+    private EditText titleField;
+    private EditText descField;
+    private RadioGroup radioGroup1;
     private Button sendButton;
 
     @Override
@@ -110,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             dummy = new GpsCoordinates(this);
         }
 
+        sendButtonListenSetUp();
+    }
+
+    private void sendButtonListenSetUp() {
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.desc_field);
         radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
@@ -154,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
     }
-
 
     private void enableSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
