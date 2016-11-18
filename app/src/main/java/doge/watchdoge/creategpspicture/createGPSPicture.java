@@ -19,7 +19,8 @@ public class createGPSPicture {
         //Pair<Double, Double> dummy = Pair.create(60.457027 ,2022.283202);
         //Pair<Double, Double> coordinates = input.getGPS();
         String size = "640x640";
-        String marker = "http://i.imgur.com/kPtp25C.png";
+        //String marker = "http://i.imgur.com/kPtp25C.png"; Round variant
+        String marker = "http://i.imgur.com/S0yy7o3.png";   // shaped as marker
         String imageUrl;
         if(coordinates==null || coordinates.first == null || coordinates.second == null){
             System.out.println("Using Android.location coordinates (googleAPI not supported or disabled!)");
