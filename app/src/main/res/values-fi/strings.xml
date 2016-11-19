@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Watchdoge</string>
+    <string name="title_hint">Ongelman otsikko</string>
+    <string name="desc_hint">Ongelman kuvaus</string>
+    <string name="public_radio_button">Julkinen alue</string>
+    <string name="private_radio_button">Oma asunto</string>
+</resources>
