@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Object possibleRadioButtonObject = findViewById(possibleID);
                 if (possibleRadioButtonObject != null) {
                     RadioButton privatePublicButton = (RadioButton) possibleRadioButtonObject;
-                    CharSequence text = privatePublicButton.getText();
+                    CharSequence text = privatePublicButton.getContentDescription();
                     if (text != null)
                         return text;
                 }

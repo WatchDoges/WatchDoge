@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/private_button"
+                android:contentDescription="Private Area"
                 android:layout_weight="1" />
 
             <RadioButton
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/public_button"
+                android:contentDescription="Public Area"
                 android:layout_weight="1" />
         </RadioGroup>
 
