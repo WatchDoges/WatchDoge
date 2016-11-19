@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Watchdoge</string>
+    <string name="title_hint">Rubrik för problemet</string>
+    <string name="desc_hint">Beskrivning av problemet</string>
+    <string name="public_radio_button">Allmänt område</string>
+    <string name="private_radio_button">Egen lägenhet</string>
+    <string name="title_view">Rubrik</string>
+    <string name="desc_view">Beskrivning</string>
+    <string name="report_type_view">Rapporttyp</string>
+</resources>
