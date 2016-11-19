@@ -277,12 +277,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         {
             //Get our saved file into a bitmap object:
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
-            Bitmap bitmap = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), 1920, 1080);
-            Uri probpicuri = ImageConverters.bitmapToPNG(bitmap, probpicname);
-            if (probpicuri!=null)
-                updateUrisHashmap(probpicname, probpicuri);
+            //Bitmap bitmap = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(),probpicname, 1920, 1080);
+            Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(),probpicname, 1920, 1080);
+            //Uri probpicuri = ImageConverters.bitmapToPNG(bitmap, probpicname);
+            if (probPicUri!=null)
+                updateUrisHashmap(probpicname, probPicUri);
             ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(bitmap);
+            img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath() ));
             gpsPicture();
         }
     }
