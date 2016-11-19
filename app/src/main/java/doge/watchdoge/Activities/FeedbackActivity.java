@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import doge.watchdoge.R;
+import doge.watchdoge.exitHelpClass.ExitHelper;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -29,16 +30,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
     /** Input: The current view, provided automatically.
      *  Output: None
-     *  Effect: Return to the home screen of your android device.
-     *  Intended effect: To be implemented! Should close entire app and return to android device
-     *  home screen.
+     *  Effect: Return to the home screen of your android device by using the finish()-method
+     *      on all activities created.
      */
     public void closeButtonClick(View v){
         deleteOldFiles(MainActivity.uris);
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory( Intent.CATEGORY_HOME );
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(homeIntent);
+        ExitHelper.isExitFlagRaised = true;
+        finish();
     }
 
     /** Input: The current view. Provided automatically.

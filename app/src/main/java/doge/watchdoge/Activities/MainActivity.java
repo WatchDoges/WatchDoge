@@ -43,6 +43,7 @@ import java.util.Set;
 import doge.watchdoge.R;
 import doge.watchdoge.converters.ImageConverters;
 import doge.watchdoge.creategpspicture.createGPSPicture;
+import doge.watchdoge.exitHelpClass.ExitHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
 
@@ -114,6 +115,47 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
 
         sendButtonListenSetUp();
+    }
+
+    @Override
+    protected void onStart() {
+        //TODO
+        super.onStart();
+        if (ExitHelper.isExitFlagRaised) {
+            ExitHelper.isExitFlagRaised = false;
+            this.finish();
+        }
+        if (mGoogleApiClient != null) mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkGoogleAPI();
+
+        // Resuming the periodic location updates
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates)
+                startLocationUpdates();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected()) {
+                stopLocationUpdates();
+            }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null)
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
     }
 
     /**
@@ -576,41 +618,5 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // Displaying the new location on UI
         updateLocation();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        checkGoogleAPI();
-
-        // Resuming the periodic location updates
-        if (mGoogleApiClient != null)
-            if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates)
-                startLocationUpdates();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null)
-            if (mGoogleApiClient.isConnected()) {
-                mGoogleApiClient.disconnect();
-            }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mGoogleApiClient != null)
-            if (mGoogleApiClient.isConnected()) {
-                stopLocationUpdates();
-            }
     }
 }
