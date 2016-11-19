@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import doge.watchdoge.R;
+import doge.watchdoge.exitHelpClass.ExitHelper;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -29,25 +31,24 @@ public class FeedbackActivity extends AppCompatActivity {
 
     /** Input: The current view, provided automatically.
      *  Output: None
-     *  Effect: Return to the main menu of your android device.
-     *  Intended effect: To be implemented! Should close entire app and return to android device
-     *  home screen.
+     *  Effect: Return to the home screen of your android device by using the finish()-method
+     *      on all activities created.
      */
     public void closeButtonClick(View v){
-        deleteOldFiles(MainActivity.uris);
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory( Intent.CATEGORY_HOME );
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(homeIntent);
+        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        ExitHelper.isExitFlagRaised = true;
+        finish();
     }
 
     /** Input: The current view. Provided automatically.
      *  Output: None.
-     *  Effect: Should delete all old pictures and restart the MainActiity with cleared fields.
-     *  Currently only deletes old report picture files.
+     *  Effect: Deletes all old pictures and restarts the MainActivity with cleared fields.
      */
     public void newReportButtonClick(View v){
-        deleteOldFiles(MainActivity.uris);
+        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
     }
 
     /** Input: The hasmap with all uris for the picutres taken
@@ -56,9 +57,9 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Intended use: When starting a new report or closing app, call this to clear
      *  the external directory of pictures taken by this app.
      */
-    private void deleteOldFiles(HashMap<String, Uri> uris){
+    private void deleteOldFiles(HashMap<String, Uri> uris, ArrayList<File> tempImages){
         System.out.println("Running on destroy...");
-        for(Uri uri : MainActivity.uris.values()){
+        for(Uri uri : uris.values()){
         //Destroy the file references in the uri.
             File pictureFile = new File(uri.getPath());
             if (pictureFile!=null) {
@@ -68,6 +69,10 @@ public class FeedbackActivity extends AppCompatActivity {
             } else {
                 System.out.println("Picture was null!");
             }
+        }
+        //deleting all temporary images
+        for(File file : tempImages){
+            file.delete();
         }
     }
 }
