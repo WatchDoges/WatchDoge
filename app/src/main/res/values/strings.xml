@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Watchdoge</string>
+    <string name="desc_hint">Description of the problem</string>
+    <string name="title_hint">Title of the problem</string>
+    <string name="public_radio_button">Public area</string>
+    <string name="private_radio_button">Your apartment</string>
 </resources>
