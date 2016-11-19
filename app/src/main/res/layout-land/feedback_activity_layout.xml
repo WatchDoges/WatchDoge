@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="Report type"
+            android:text="@string/report_type_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/report_type_view"
@@ -22,7 +22,7 @@
             android:id="@+id/report_type_text_view" />
 
         <TextView
-            android:text="Title"
+            android:text="@string/title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_view"
@@ -34,7 +34,7 @@
             android:id="@+id/title_text_view" />
 
         <TextView
-            android:text="Description"
+            android:text="@string/desc_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/desc_view"
