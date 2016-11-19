@@ -251,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
+        System.out.println("Attempting to update hashmap with key: " + key);
+        System.out.println("Existing keys are: " + MainActivity.uris.keySet().toString());
         if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key))
             MainActivity.uris.remove(key);
         //Regular problem pictures are automatically added.
@@ -300,12 +302,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String newProblemPicName = null;
+        String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             System.out.println("Doing the request-image-capture");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
             Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, newProblemPicName);
             if (probpicuri != null)
                 updateUrisHashmap(newProblemPicName, probpicuri);
@@ -316,13 +317,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
             //Get our saved file into a bitmap object:
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
-            newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
             if(file != null) {
                 Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
                 pictureList.add(file);
                 if (probPicUri != null)
-                    updateUrisHashmap(MainActivity.probpicbasename, probPicUri);
+                    updateUrisHashmap(newProblemPicName, probPicUri);
 //                ImageView img = (ImageView) findViewById(R.id.imageView);
 //                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             }
@@ -335,18 +335,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Output: A new unique name for a problem picture.
      * Used to to find a fresh problempicture name before converting the BitMap to a PNG.
      */
-    private String findFreshName(String key, HashMap<String, Uri> uris) {
+    private String findFreshName(String attemptedName, HashMap<String, Uri> uris) {
         Set<String> keys = uris.keySet();
         Integer newID = 0;
         //If the keys are, for example. key+0, key+1 and key+2, this for-loop will push newID
         //to 3 and return key+3. If the keys are only key+1, then key+0 will be returned since
         //it wasn't in the set of keys.
         for (String k : keys) {
-            String possibleNewName = key + newID.toString();
+            String possibleNewName = attemptedName + newID.toString();
             if (keys.contains(possibleNewName)) newID++;
             else return possibleNewName;
         }
-        return key + newID.toString();
+        return attemptedName + newID.toString();
     }
 
     private HashMap<String, Object> createInformationHashMap() {
