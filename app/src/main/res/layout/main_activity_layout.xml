@@ -87,20 +87,6 @@
                 android:adjustViewBounds="true"
                 android:padding="5dp"/>
 
-            <ImageView
-                android:background="@null"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_launcher_doge"
-                android:id="@+id/imageView"
-                android:cropToPadding="true"
-                android:scaleType="centerInside"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:adjustViewBounds="true"
-                android:maxHeight="100dp"
-                android:maxWidth="100dp"/>
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
