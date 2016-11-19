@@ -26,14 +26,14 @@
                 android:id="@+id/radioGroup1">
 
                 <RadioButton
-                    android:text="Your Apartment"
+                    android:text="@string/private_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/private_button"
                     android:layout_weight="1" />
 
                 <RadioButton
-                    android:text="Public Area"
+                    android:text="@string/public_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/public_button"
@@ -46,7 +46,7 @@
                 android:inputType="text"
                 android:ems="10"
                 android:id="@+id/title_field"
-                android:hint="Add title"
+                android:hint="@string/title_hint"
                 android:layout_weight="0.05"/>
 
             <EditText
@@ -55,7 +55,7 @@
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:id="@+id/desc_field"
-                android:hint="Describe the problem"
+                android:hint="@string/desc_hint"
                 android:layout_weight="0.9"
                 android:gravity="top|center_vertical" />
 
