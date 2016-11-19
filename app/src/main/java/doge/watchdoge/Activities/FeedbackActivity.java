@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import doge.watchdoge.R;
 import doge.watchdoge.exitHelpClass.ExitHelper;
+import doge.watchdoge.externalsenders.EmailSender;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -25,7 +26,11 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     public void resendButtonClick(View v){
-        //PLACEHOLDER
+        HashMap<String, Object> hm = EmailSender.hashMap;
+        if(hm != null){
+            Intent i = EmailSender.getIntent(hm);
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        }
     }
 
 
