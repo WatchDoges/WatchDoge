@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private LocationRequest mLocationRequest;
 
     // Location updates intervals in sec
-    private static int UPDATE_INTERVAL = 10000; // 10 sec
-    private static int FATEST_INTERVAL = 5000; // 5 sec
-    private static int DISPLACEMENT = 5; // 10 meters
+    private static int UPDATE_INTERVAL = 4000; // 4 sec
+    private static int FATEST_INTERVAL = 2000; // 2 sec
+    private static int DISPLACEMENT = 5; // 5 meters displacement triggers locationupdate
 
     // XML component declarations
     private EditText titleField;
