@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 public class EmailSender extends GeneralSender{
 
+    public static HashMap<String, Object> hashMap;
+
     @Override
     public boolean send(){
         return false;
@@ -29,6 +31,7 @@ public class EmailSender extends GeneralSender{
             System.out.println("Info is null");
             return null;
         }
+        hashMap = info;
         Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
         i.setType("message/rfc822");
 
