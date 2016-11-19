@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private GpsCoordinates dummy;
+    public static ArrayList<File> pictureList = new ArrayList<File>();
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
     private static String gpspicname = "gpspicture";
@@ -277,13 +278,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         {
             //Get our saved file into a bitmap object:
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
-            //Bitmap bitmap = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(),probpicname, 1920, 1080);
-            Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(),probpicname, 1920, 1080);
-            //Uri probpicuri = ImageConverters.bitmapToPNG(bitmap, probpicname);
-            if (probPicUri!=null)
-                updateUrisHashmap(probpicname, probPicUri);
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath() ));
+            if(file != null) {
+                Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), probpicname, 1920, 1080);
+                pictureList.add(file);
+                if (probPicUri != null)
+                    updateUrisHashmap(probpicname, probPicUri);
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+            }
             gpsPicture();
         }
     }
