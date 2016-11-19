@@ -1,4 +1,4 @@
-package doge.watchdoge.activities;
+package doge.watchdoge.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
