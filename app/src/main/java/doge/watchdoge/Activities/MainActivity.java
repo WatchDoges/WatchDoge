@@ -247,6 +247,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         startActivityForResult(intent, CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE);
     }
 
+    /**
+     * The album button functionality
+     */
+    public void  albumButtonClick(View v) {
+        Toast t = Toast.makeText(this.getApplicationContext(), "IT WERKS!", Toast.LENGTH_LONG);
+        t.show();
+    }
+
     /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
      *  Output: None.
      *  Effect: Creates a full-sized picture from the camera, stores it with a unique name
@@ -419,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 tmp = createGPSPicture.CreateGPSPictue(null);
             }
 
-            ImageView img = (ImageView) findViewById(R.id.imageView);
+            //ImageView img = (ImageView) findViewById(R.id.imageView);
             //img.setImageBitmap(tmp);
             Uri newName = ImageConverters.bitmapToPNG(tmp, MainActivity.gpspicname);
             if (newName != null)
