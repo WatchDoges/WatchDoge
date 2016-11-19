@@ -6,5 +6,5 @@
     <string name="private_radio_button">Oma asunto</string>
     <string name="title_view">Otsikko</string>
     <string name="desc_view">Kuvaus</string>
-    <string name="report_type_view">Ilmoitus kategoria</string>
+    <string name="report_type_view">Ilmoituskategoria</string>
 </resources>

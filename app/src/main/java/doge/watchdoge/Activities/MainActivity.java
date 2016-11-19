@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
-    private GpsCoordinates dummy;
+    private GpsCoordinates coordinates;
     public static ArrayList<File> pictureList = new ArrayList<File>();
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
     private static String gpspicname = "gpspicture";
-    private String probpicname;
+    private static String probpicbasename = "problempicture";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     public static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 1777;
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             createLocationRequest();
         } else {
             togglePeriodicLocationUpdates();
-            dummy = new GpsCoordinates(this);
+            coordinates = new GpsCoordinates(this);
         }
 
         sendButtonListenSetUp();
@@ -251,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it first.
+        System.out.println("Attempting to update hashmap with key: " + key);
+        System.out.println("Existing keys are: " + MainActivity.uris.keySet().toString());
         if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key))
             MainActivity.uris.remove(key);
         //Regular problem pictures are automatically added.
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     public void cameraButtonClick(View v) {
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        probpicname = findFreshName("problempicture", MainActivity.uris);
+        String probpicname = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
         File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         startActivityForResult(intent, CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE);
@@ -289,8 +291,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * The album button functionality
      */
     public void  albumButtonClick(View v) {
-        Toast t = Toast.makeText(this.getApplicationContext(), "IT WERKS!", Toast.LENGTH_LONG);
-        t.show();
+        Intent albumActivityIntent = new Intent(this, AlbumActivity.class);
+        startActivity(albumActivityIntent);
     }
 
     /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
@@ -300,26 +302,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            System.out.println("Doing the request-image-capture");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String probpicname = findFreshName("problempicture", MainActivity.uris);
-            Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
+            Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, newProblemPicName);
             if (probpicuri != null)
-                updateUrisHashmap(probpicname, probpicuri);
+                updateUrisHashmap(newProblemPicName, probpicuri);
 //            ImageView img = (ImageView) findViewById(R.id.imageView);
 //            img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
-        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE)
-        {
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
             //Get our saved file into a bitmap object:
-            File file = new File(Environment.getExternalStorageDirectory()+File.separator + probpicname);
+            System.out.println("Doing the capture-image-fullsize in MainActivity.");
+            File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
             if(file != null) {
-                Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), probpicname, 1920, 1080);
+                Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
                 pictureList.add(file);
                 if (probPicUri != null)
-                    updateUrisHashmap(probpicname, probPicUri);
+                    updateUrisHashmap(newProblemPicName, probPicUri);
 //                ImageView img = (ImageView) findViewById(R.id.imageView);
 //                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             }
@@ -332,18 +335,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Output: A new unique name for a problem picture.
      * Used to to find a fresh problempicture name before converting the BitMap to a PNG.
      */
-    private String findFreshName(String key, HashMap<String, Uri> uris) {
+    private String findFreshName(String attemptedName, HashMap<String, Uri> uris) {
         Set<String> keys = uris.keySet();
         Integer newID = 0;
         //If the keys are, for example. key+0, key+1 and key+2, this for-loop will push newID
         //to 3 and return key+3. If the keys are only key+1, then key+0 will be returned since
         //it wasn't in the set of keys.
         for (String k : keys) {
-            String possibleNewName = key + newID.toString();
+            String possibleNewName = attemptedName + newID.toString();
             if (keys.contains(possibleNewName)) newID++;
             else return possibleNewName;
         }
-        return key + newID.toString();
+        return attemptedName + newID.toString();
     }
 
     private HashMap<String, Object> createInformationHashMap() {
@@ -382,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Object possibleRadioButtonObject = findViewById(possibleID);
                 if (possibleRadioButtonObject != null) {
                     RadioButton privatePublicButton = (RadioButton) possibleRadioButtonObject;
-                    CharSequence text = privatePublicButton.getText();
+                    CharSequence text = privatePublicButton.getContentDescription();
                     if (text != null)
                         return text;
                 }
