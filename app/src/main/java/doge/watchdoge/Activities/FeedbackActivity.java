@@ -51,7 +51,7 @@ public class FeedbackActivity extends AppCompatActivity {
      *      on all activities created.
      */
     public void closeButtonClick(View v){
-        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        ExitHelper.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
         ExitHelper.isExitFlagRaised = true;
         finish();
     }
@@ -61,34 +61,9 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Effect: Deletes all old pictures and restarts the MainActivity with cleared fields.
      */
     public void newReportButtonClick(View v){
-        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        ExitHelper.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
         Intent homeIntent = new Intent(this, MainActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);
-    }
-
-    /** Input: The hasmap with all uris for the picutres taken
-     *  Output: None.
-     *  Effect: Removes all the files in the uris hashmap.
-     *  Intended use: When starting a new report or closing app, call this to clear
-     *  the external directory of pictures taken by this app.
-     */
-    private void deleteOldFiles(HashMap<String, Uri> uris, ArrayList<File> tempImages){
-        System.out.println("Running on destroy...");
-        for(Uri uri : uris.values()){
-        //Destroy the file references in the uri.
-            File pictureFile = new File(uri.getPath());
-            if (pictureFile!=null) {
-                System.out.println("Deleting picture " + pictureFile.getName() + "...");
-                pictureFile.delete();
-                System.out.println("Delete succeeded!");
-            } else {
-                System.out.println("Picture was null!");
-            }
-        }
-        //deleting all temporary images
-        for(File file : tempImages){
-            file.delete();
-        }
     }
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 public class createGPSPicture {
 
-    public static Bitmap CreateGPSPictue(Pair<Double, Double> coordinates){
+    public static Bitmap CreateGPSPicture(Pair<Double, Double> coordinates){
         //Pair<Double, Double> dummy = Pair.create(60.457027 ,2022.283202);
         //Pair<Double, Double> coordinates = input.getGPS();
         String size = "640x640";

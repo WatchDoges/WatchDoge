@@ -250,11 +250,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Purpose: Used to track problem pictures and the gps picture of a report.
      */
     private void updateUrisHashmap(String key, Uri value) {
-        //If a GPS Picture already exists, remove it first.
-        System.out.println("Attempting to update hashmap with key: " + key);
-        System.out.println("Existing keys are: " + MainActivity.uris.keySet().toString());
-        if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key))
+        //If a GPS Picture already exists, remove it and the actual picture first.
+        if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key)) {
+            Uri oldPic = MainActivity.uris.get(key);
+            if (!oldPic.getPath().equals(value.getPath()))
+                ExitHelper.deleteFileByUri(oldPic);
             MainActivity.uris.remove(key);
+        }
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
     }
@@ -314,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 //            img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
-        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
+        else if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
             //Get our saved file into a bitmap object:
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
@@ -367,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         else hm.put("description", description);
 
         ArrayList<String> list = new ArrayList<>();
-        list.add("PLACEHOLDER_NOSPAM@wudifuqq.fi");
+        list.add("watchdoge.app@gmail.com");
         hm.put("receivers", list);
 
         ArrayList<Uri> onlyUris = new ArrayList<>(MainActivity.uris.values());
@@ -465,14 +467,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         try {
             Bitmap tmp;
             if (!mRequestingLocationUpdates) {
-                tmp = createGPSPicture.CreateGPSPictue(gpscoordinates);
+                tmp = createGPSPicture.CreateGPSPicture(gpscoordinates);
             } else {
-                tmp = createGPSPicture.CreateGPSPictue(null);
+                tmp = createGPSPicture.CreateGPSPicture(null);
             }
 
             //ImageView img = (ImageView) findViewById(R.id.imageView);
             //img.setImageBitmap(tmp);
-            Uri newName = ImageConverters.bitmapToPNG(tmp, MainActivity.gpspicname);
+            String newGpsPictureName = MainActivity.gpspicname;
+            if(mLastLocation != null){
+                //int accuracy = (int)mLastLocation.getAccuracy();
+                float accuracy = mLastLocation.getAccuracy();
+                newGpsPictureName += "_"+accuracy+"m";
+            } else newGpsPictureName += "_m";
+
+            Uri newName = ImageConverters.bitmapToPNG(tmp, newGpsPictureName);
             if (newName != null)
                 updateUrisHashmap(MainActivity.gpspicname, newName);
         } catch (Exception e) {
