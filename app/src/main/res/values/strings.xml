@@ -4,4 +4,7 @@
     <string name="title_hint">Title of the problem</string>
     <string name="public_radio_button">Public area</string>
     <string name="private_radio_button">Your apartment</string>
+    <string name="title_view">Title</string>
+    <string name="desc_view">Description</string>
+    <string name="report_type_view">Report type</string>
 </resources>
