@@ -23,19 +23,27 @@ public class GPSPicture extends AsyncTask<String, Void, Bitmap> {
 
     public static Bitmap getBitmapFromURL(String src) {
         try {
-          
+
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
+            connection.setConnectTimeout(10000); //set timeout to 10 seconds
             connection.connect();
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
             return myBitmap;
-        } catch (IOException e) {
+        }
+        //no responce form server, image cannot be created
+        catch (java.net.SocketTimeoutException e) {
+            return null;
+        }
+        //invalid connection
+        catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
     @Override
     protected Bitmap doInBackground(String... params) {

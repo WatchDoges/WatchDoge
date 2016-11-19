@@ -51,7 +51,7 @@ public class ImageConverters {
      *  Effect: Decodes a file from the camera to a Bitmap with the best match to the desired resolution
      *  Returns to caller when Bitmap conversion is finished
      */
-    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
+    public static Uri decodeSampledBitmapFromFile(String path,String pictureName, int reqWidth, int reqHeight)
     { // BEST QUALITY MATCH
 
         //First decode with inJustDecodeBounds=true to check dimensions
@@ -82,6 +82,7 @@ public class ImageConverters {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
 
-        return BitmapFactory.decodeFile(path, options);
+
+        return bitmapToPNG(BitmapFactory.decodeFile(path, options),pictureName);
     }
 }
