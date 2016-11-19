@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import doge.watchdoge.R;
@@ -34,7 +35,7 @@ public class FeedbackActivity extends AppCompatActivity {
      *  home screen.
      */
     public void closeButtonClick(View v){
-        deleteOldFiles(MainActivity.uris);
+        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory( Intent.CATEGORY_HOME );
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -47,7 +48,7 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Currently only deletes old report picture files.
      */
     public void newReportButtonClick(View v){
-        deleteOldFiles(MainActivity.uris);
+        deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
     }
 
     /** Input: The hasmap with all uris for the picutres taken
@@ -56,9 +57,9 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Intended use: When starting a new report or closing app, call this to clear
      *  the external directory of pictures taken by this app.
      */
-    private void deleteOldFiles(HashMap<String, Uri> uris){
+    private void deleteOldFiles(HashMap<String, Uri> uris, ArrayList<File> tempImages){
         System.out.println("Running on destroy...");
-        for(Uri uri : MainActivity.uris.values()){
+        for(Uri uri : uris.values()){
         //Destroy the file references in the uri.
             File pictureFile = new File(uri.getPath());
             if (pictureFile!=null) {
@@ -68,6 +69,10 @@ public class FeedbackActivity extends AppCompatActivity {
             } else {
                 System.out.println("Picture was null!");
             }
+        }
+        //deleting all temporary images
+        for(File file : tempImages){
+            file.delete();
         }
     }
 }
