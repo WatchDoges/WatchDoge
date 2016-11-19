@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -97,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         /** If there is a saved bitmap in the state, reset it. Will prevent image from disappearing
          when changing orientation of the device*/
-        if (savedInstanceState != null) {
-            ImageView view = (ImageView) findViewById(R.id.imageView); // Get the current bitmap
-            // Restore the the bitmap to the imageView
-            view.setImageBitmap((Bitmap) savedInstanceState.getParcelable("problemPicture"));
-        }
+//        if (savedInstanceState != null) {
+//            ImageView view = (ImageView) findViewById(R.id.imageView); // Get the current bitmap
+//            // Restore the the bitmap to the imageView
+//            view.setImageBitmap((Bitmap) savedInstanceState.getParcelable("problemPicture"));
+//        }
 
         if (checkGoogleAPI()) {
 
@@ -228,21 +225,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      *
      * @param state The state in which the bitmap is changed
      */
-    @Override
-    public void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        ImageView view = (ImageView) findViewById(R.id.imageView); // Get the imageView
-        try {
-            // Get current bitmap
-            Bitmap problemPicture = ((BitmapDrawable) view.getDrawable()).getBitmap();
-            // Save the bitmap in the state
-            state.putParcelable("problemPicture", problemPicture);
-        } catch (ClassCastException CCE) {
-            CCE.printStackTrace();
-            System.err.print("Class cast exception");
-        }
-
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle state) {
+//        super.onSaveInstanceState(state);
+//        ImageView view = (ImageView) findViewById(R.id.imageView); // Get the imageView
+//        try {
+//            // Get current bitmap
+//            Bitmap problemPicture = ((BitmapDrawable) view.getDrawable()).getBitmap();
+//            // Save the bitmap in the state
+//            state.putParcelable("problemPicture", problemPicture);
+//        } catch (ClassCastException CCE) {
+//            CCE.printStackTrace();
+//            System.err.print("Class cast exception");
+//        }
+//
+//    }
 
 
     /**
@@ -310,8 +307,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, probpicname);
             if (probpicuri != null)
                 updateUrisHashmap(probpicname, probpicuri);
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setImageBitmap(imageBitmap);
+//            ImageView img = (ImageView) findViewById(R.id.imageView);
+//            img.setImageBitmap(imageBitmap);
             gpsPicture();
         }
         if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE)
@@ -323,8 +320,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 pictureList.add(file);
                 if (probPicUri != null)
                     updateUrisHashmap(probpicname, probPicUri);
-                ImageView img = (ImageView) findViewById(R.id.imageView);
-                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+//                ImageView img = (ImageView) findViewById(R.id.imageView);
+//                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             }
             gpsPicture();
         }
