@@ -37,9 +37,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 import doge.watchdoge.R;
-import doge.watchdoge.converters.ImageConverters;
+import doge.watchdoge.imagehandlers.ImageHandlers;
 import doge.watchdoge.creategpspicture.createGPSPicture;
-import doge.watchdoge.exitHelpClass.ExitHelper;
+import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
 
@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public static ArrayList<File> pictureList = new ArrayList<File>();
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
-    private static String gpspicname = "gpspicture";
-    private static String probpicbasename = "problempicture";
+    public static final String gpspicbasename = "gpspicture";
+    public static final String probpicbasename = "problempicture";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     public static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 1777;
 
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ImageHandlers.initializeDirectories();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -117,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onStart() {
         super.onStart();
-        if (ExitHelper.isExitFlagRaised) {
-            ExitHelper.isExitFlagRaised = false;
+        if (CleanupHelper.isExitFlagRaised) {
+            CleanupHelper.isExitFlagRaised = false;
             this.finish();
         }
         if (mGoogleApiClient != null) mGoogleApiClient.connect();
@@ -251,10 +252,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     private void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it and the actual picture first.
-        if (key == MainActivity.gpspicname && MainActivity.uris.containsKey(key)) {
+        if (key == MainActivity.gpspicbasename && MainActivity.uris.containsKey(key)) {
             Uri oldPic = MainActivity.uris.get(key);
             if (!oldPic.getPath().equals(value.getPath()))
-                ExitHelper.deleteFileByUri(oldPic);
+                ImageHandlers.deleteFileByUri(oldPic);
             MainActivity.uris.remove(key);
         }
         //Regular problem pictures are automatically added.
@@ -309,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             System.out.println("Doing the request-image-capture");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Uri probpicuri = ImageConverters.bitmapToPNG(imageBitmap, newProblemPicName);
+            Uri probpicuri = ImageHandlers.bitmapToPNG(imageBitmap, newProblemPicName);
             if (probpicuri != null)
                 updateUrisHashmap(newProblemPicName, probpicuri);
 //            ImageView img = (ImageView) findViewById(R.id.imageView);
@@ -321,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
             if(file != null) {
-                Uri probPicUri = ImageConverters.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
+                Uri probPicUri = ImageHandlers.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
                 pictureList.add(file);
                 if (probPicUri != null)
                     updateUrisHashmap(newProblemPicName, probPicUri);
@@ -474,16 +475,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             //ImageView img = (ImageView) findViewById(R.id.imageView);
             //img.setImageBitmap(tmp);
-            String newGpsPictureName = MainActivity.gpspicname;
+            String newGpsPictureName = MainActivity.gpspicbasename;
             if(mLastLocation != null){
                 //int accuracy = (int)mLastLocation.getAccuracy();
                 float accuracy = mLastLocation.getAccuracy();
                 newGpsPictureName += "_"+accuracy+"m";
             } else newGpsPictureName += "_m";
 
-            Uri newName = ImageConverters.bitmapToPNG(tmp, newGpsPictureName);
+            Uri newName = ImageHandlers.bitmapToPNG(tmp, newGpsPictureName);
             if (newName != null)
-                updateUrisHashmap(MainActivity.gpspicname, newName);
+                updateUrisHashmap(MainActivity.gpspicbasename, newName);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Creating GPS Picture failed.");
