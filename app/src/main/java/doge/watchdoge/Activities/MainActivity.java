@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     @Override
     protected void onStart() {
-        //TODO
         super.onStart();
         if (ExitHelper.isExitFlagRaised) {
             ExitHelper.isExitFlagRaised = false;
