@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +24,16 @@ public class FeedbackActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_menu_tys);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+        HashMap<String, Object> hm = EmailSender.hashMap;
+        if(hm != null){
+            TextView type = (TextView)findViewById(R.id.report_type_text_view);
+            type.setText((CharSequence) hm.get("report_type"));
+            TextView title = (TextView)findViewById(R.id.title_text_view);
+            title.setText((CharSequence) hm.get("title"));
+            TextView desc = (TextView)findViewById(R.id.desc_text_view);
+            desc.setText((CharSequence) hm.get("description"));
+        }
     }
 
     public void resendButtonClick(View v){

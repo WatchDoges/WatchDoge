@@ -10,12 +10,41 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="Report goes here "
+            android:text="Report type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/result_view"
-            android:layout_weight="0.4"
-            android:textAlignment="center" />
+            android:id="@+id/report_type_view"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/report_type_text_view" />
+
+        <TextView
+            android:text="Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_view"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_text_view" />
+
+        <TextView
+            android:text="Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/desc_view"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/desc_text_view"
+            android:layout_weight="0.4" />
 
         <LinearLayout
             android:orientation="horizontal"
