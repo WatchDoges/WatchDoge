@@ -37,11 +37,13 @@ import java.util.HashMap;
 import java.util.Set;
 
 import doge.watchdoge.R;
+import doge.watchdoge.imagehandlers.GpsPictureCreationThread;
 import doge.watchdoge.imagehandlers.ImageHandlers;
 import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
+import doge.watchdoge.imagehandlers.PictureCreationThread;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, ConnectionCallbacks,
@@ -250,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * uris hashmap.
      * Purpose: Used to track problem pictures and the gps picture of a report.
      */
-    private void updateUrisHashmap(String key, Uri value) {
+    public static void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it and the actual picture first.
         if (key == MainActivity.gpspicbasename && MainActivity.uris.containsKey(key)) {
             Uri oldPic = MainActivity.uris.get(key);
@@ -305,30 +307,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            System.out.println("Doing the request-image-capture");
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Uri probpicuri = ImageHandlers.bitmapToPNG(imageBitmap, newProblemPicName);
-            if (probpicuri != null)
-                updateUrisHashmap(newProblemPicName, probpicuri);
-//            ImageView img = (ImageView) findViewById(R.id.imageView);
-//            img.setImageBitmap(imageBitmap);
-            gpsPicture();
-        }
-        else if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
+
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE) {
             //Get our saved file into a bitmap object:
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
-            File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
-            if(file != null) {
-                Uri probPicUri = ImageHandlers.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
-                pictureList.add(file);
-                if (probPicUri != null)
-                    updateUrisHashmap(newProblemPicName, probPicUri);
-//                ImageView img = (ImageView) findViewById(R.id.imageView);
-//                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-            }
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + newProblemPicName);
+            Object[] DataTransfer = new Object[2];
+            DataTransfer[0] = file;
+            DataTransfer[1] = newProblemPicName;
+
+            Uri probPicUri = null;
+
+            //thread is created that processes the problem picture
+            PictureCreationThread thread = new PictureCreationThread(DataTransfer, probPicUri);
+            thread.start();
+
             gpsPicture();
         }
     }
@@ -464,31 +459,34 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
-    private void gpsPicture() {
-        try {
-            Bitmap tmp;
-            if (!mRequestingLocationUpdates) {
-                tmp = createGPSPicture.CreateGPSPicture(gpscoordinates);
-            } else {
-                tmp = createGPSPicture.CreateGPSPicture(null);
-            }
-
-            //ImageView img = (ImageView) findViewById(R.id.imageView);
-            //img.setImageBitmap(tmp);
-            String newGpsPictureName = MainActivity.gpspicbasename;
-            if(mLastLocation != null){
-                //int accuracy = (int)mLastLocation.getAccuracy();
-                float accuracy = mLastLocation.getAccuracy();
-                newGpsPictureName += "_"+accuracy+"m";
-            } else newGpsPictureName += "_m";
-
-            Uri newName = ImageHandlers.bitmapToPNG(tmp, newGpsPictureName);
-            if (newName != null)
-                updateUrisHashmap(MainActivity.gpspicbasename, newName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Creating GPS Picture failed.");
-        }
+    public void gpsPicture() {
+//        try {
+//            Bitmap tmp;
+//            if (!mRequestingLocationUpdates) {
+//                tmp = createGPSPicture.CreateGPSPicture(gpscoordinates);
+//            } else {
+//                tmp = createGPSPicture.CreateGPSPicture(null);
+//            }
+//
+//            //ImageView img = (ImageView) findViewById(R.id.imageView);
+//            //img.setImageBitmap(tmp);
+//            String newGpsPictureName = MainActivity.gpspicbasename;
+//            if(mLastLocation != null){
+//                //int accuracy = (int)mLastLocation.getAccuracy();
+//                float accuracy = mLastLocation.getAccuracy();
+//                newGpsPictureName += "_"+accuracy+"m";
+//            } else newGpsPictureName += "_m";
+//
+//            Uri newName = ImageHandlers.bitmapToPNG(tmp, newGpsPictureName);
+//            if (newName != null)
+//                updateUrisHashmap(MainActivity.gpspicbasename, newName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Creating GPS Picture failed.");
+//        }
+        //threaded behaviour of gpsPicture
+        GpsPictureCreationThread thread = new GpsPictureCreationThread(mRequestingLocationUpdates,gpscoordinates,mLastLocation);
+        thread.start();
     }
 
     private void updateLocation() {
