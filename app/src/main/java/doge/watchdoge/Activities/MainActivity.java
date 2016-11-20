@@ -1,6 +1,7 @@
 package doge.watchdoge.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,13 +14,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -296,6 +300,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public void  albumButtonClick(View v) {
         Intent albumActivityIntent = new Intent(this, AlbumActivity.class);
         startActivity(albumActivityIntent);
+    }
+
+    /**
+     * Display help text for the title
+     */
+    public void titleHelpClick(View v) {
+
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_title_text, Toast.LENGTH_LONG);
+        t.show();
+
+    }
+    /**
+     * Display help text for the description
+     */
+    public void descHelpClick(View v) {
+
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_help_text, Toast.LENGTH_LONG);
+        t.show();
+
     }
 
     /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
