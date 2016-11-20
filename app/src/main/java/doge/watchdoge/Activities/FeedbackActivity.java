@@ -1,19 +1,17 @@
 package doge.watchdoge.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import doge.watchdoge.R;
-import doge.watchdoge.exitHelpClass.ExitHelper;
+import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
+import doge.watchdoge.imagehandlers.ImageHandlers;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -51,8 +49,8 @@ public class FeedbackActivity extends AppCompatActivity {
      *      on all activities created.
      */
     public void closeButtonClick(View v){
-        ExitHelper.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
-        ExitHelper.isExitFlagRaised = true;
+        ImageHandlers.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        CleanupHelper.isExitFlagRaised = true;
         finish();
     }
 
@@ -61,7 +59,7 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Effect: Deletes all old pictures and restarts the MainActivity with cleared fields.
      */
     public void newReportButtonClick(View v){
-        ExitHelper.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        ImageHandlers.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
         Intent homeIntent = new Intent(this, MainActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);
