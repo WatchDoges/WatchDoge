@@ -8,36 +8,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:padding="5dp"
-        android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:weightSum="1">
 
         <RadioGroup
-            android:id="@+id/radioGroup1"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.05"
-            android:orientation="horizontal">
+            android:id="@+id/radioGroup1">
 
             <RadioButton
+                android:text="@string/private_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/private_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:contentDescription="Private Area"
-                android:text="@string/private_radio_button" />
+                android:layout_weight="1" />
 
             <RadioButton
-                android:id="@+id/public_button"
+                android:text="@string/public_radio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:id="@+id/public_button"
                 android:contentDescription="Public Area"
-                android:text="@string/public_radio_button" />
+                android:layout_weight="1" />
         </RadioGroup>
 
         <LinearLayout
@@ -112,54 +112,48 @@
             android:layout_weight="0.05">
 
             <ImageButton
-                android:id="@+id/imageButton"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                app:srcCompat="@drawable/ic_perm_media_green_48dp"
+                android:onClick="albumButtonClick"
+                android:id="@+id/imageButton"
+                android:background="@null"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="2dp"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:onClick="albumButtonClick"
-                android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_perm_media_green_48dp" />
+                android:adjustViewBounds="true"
+                android:padding="5dp"/>
 
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:orientation="vertical">
+                android:layout_gravity="right">
 
-                <Button
-                    android:id="@+id/camera_button"
+                <ImageButton
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_margin="2dp"
+                    android:id="@+id/camera_button"
                     android:layout_weight="0.10"
-                    android:background="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
                     android:onClick="cameraButtonClick"
-                    android:text="Camera"
-                    android:textColor="@android:color/background_light" />
-
-                <Button
-                    android:id="@+id/send_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
                     android:layout_gravity="right"
                     android:layout_margin="2dp"
-                    android:layout_weight="0.10"
-                    android:alpha=".5"
-                    android:background="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:enabled="false"
+                    android:src="@drawable/ic_photo_camera_green"/>
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/send_button"
                     android:onClick="sendButtonClick"
-                    android:text="Send"
-                    android:textColor="@android:color/background_light" />
+                    android:layout_gravity="right"
+                    android:layout_weight="0.10"
+                    android:layout_margin="2dp"
+                    android:alpha=".5"
+                    android:src="@drawable/ic_send_green"
+                    android:background="@null" />
 
             </LinearLayout>
-
         </GridLayout>
 
     </LinearLayout>
