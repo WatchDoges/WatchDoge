@@ -70,7 +70,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.1"
                     android:background="@null"
-                    app:srcCompat="@drawable/ic_help_outline_black_36dp"
+                    app:srcCompat="@drawable/ic_help_green_36dp"
                     android:id="@+id/title_help"
                     android:onClick="titleHelpClick"/>
             </LinearLayout>
@@ -98,7 +98,7 @@
                     android:layout_gravity="top|center"
                     android:layout_weight="0.1"
                     android:background="@null"
-                    app:srcCompat="@drawable/ic_help_outline_black_36dp"
+                    app:srcCompat="@drawable/ic_help_green_36dp"
                     android:id="@+id/desc_help"
                     android:onClick="descHelpClick" />
             </LinearLayout>
