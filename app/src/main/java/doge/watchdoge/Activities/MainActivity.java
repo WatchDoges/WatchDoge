@@ -3,7 +3,6 @@ package doge.watchdoge.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -40,7 +38,6 @@ import java.util.Set;
 import doge.watchdoge.R;
 import doge.watchdoge.imagehandlers.GpsPictureCreationThread;
 import doge.watchdoge.imagehandlers.ImageHandlers;
-import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
@@ -77,12 +74,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static int DISPLACEMENT = 5; // 5 meters displacement triggers locationupdate
 
     // XML component declarations
-    private EditText titleField;
-    private EditText descField;
-    private RadioGroup radioGroup1;
-    private RadioButton privateButton;
-    private RadioButton publicButton;
-    private ImageButton sendButton;
+    private static EditText titleField;
+    private static EditText descField;
+    private static RadioGroup radioGroup1;
+    private static RadioButton privateButton;
+    private static RadioButton publicButton;
+    private static ImageButton sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                enableSendButton();
+                toggleSendButton();
             }
         });
 
@@ -196,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                enableSendButton();
+                toggleSendButton();
             }
         });
 
@@ -204,16 +201,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onCheckedChanged(RadioGroup radioGroup1, int checkedId) {
                 boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
-                if (isChecked) enableSendButton();
+                if (isChecked) toggleSendButton();
             }
         });
-        enableSendButton();
+        toggleSendButton();
     }
 
     /**
      * Enables/disables and greys out the send button.
      */
-    private void enableSendButton() {
+    private static void toggleSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
                 && descField.getText().toString().length() > 0
                 && radioGroup1.getCheckedRadioButtonId() != -1
@@ -266,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
-        enableSendButton();
+        toggleSendButton();
     }
 
     /**
