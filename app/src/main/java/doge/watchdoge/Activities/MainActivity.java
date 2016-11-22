@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private RadioGroup radioGroup1;
     private RadioButton privateButton;
     private RadioButton publicButton;
-    private Button sendButton;
+    private ImageButton sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
         privateButton = (RadioButton) findViewById(R.id.private_button);
         publicButton = (RadioButton) findViewById(R.id.public_button);
-        sendButton = (Button) findViewById(R.id.send_button);
+        sendButton = (ImageButton) findViewById(R.id.send_button);
 
         titleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 if (isChecked) enableSendButton();
             }
         });
+        enableSendButton();
     }
 
     /**
@@ -212,9 +214,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void enableSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
                 && descField.getText().toString().length() > 0
-                && radioGroup1.getCheckedRadioButtonId() != -1;
+                && radioGroup1.getCheckedRadioButtonId() != -1
+                && !uris.isEmpty();
         sendButton.setEnabled(enable);
-        if (enable) sendButton.setAlpha(1);
+        sendButton.setClickable(enable);
+        if (enable) sendButton.setAlpha(1f);
         else sendButton.setAlpha(0.5f);
     }
 
@@ -260,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
+        enableSendButton();
     }
 
     /**

@@ -160,6 +160,7 @@ public class ImageHandlers {
         for(File file : tempImages){
             file.delete();
         }
+        MainActivity.uris.clear();
     }
 
     /**
