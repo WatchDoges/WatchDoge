@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Display help text for the title
      */
     public void titleHelpClick(View v) {
-        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_title_text, Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_title_text, Toast.LENGTH_LONG);
         t.show();
     }
 
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Display help text for the description
      */
     public void descHelpClick(View v) {
-        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_help_text, Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_help_text, Toast.LENGTH_LONG);
         t.show();
     }
 
