@@ -7,4 +7,6 @@
     <string name="title_view">Otsikko</string>
     <string name="desc_view">Kuvaus</string>
     <string name="report_type_view">Ilmoituskategoria</string>
+    <string name="popup_help_text">Kuvaile ongelma tarkasti. Esim. Ikkuna ei avaa, kahva jumissa</string>
+    <string name="popup_title_text">Esim. ikkunalasi on murtunut sen sijaan, että ikkuna on rikki</string>
 </resources>

@@ -36,11 +36,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 import doge.watchdoge.R;
-import doge.watchdoge.imagehandlers.GpsPictureCreationThread;
-import doge.watchdoge.imagehandlers.ImageHandlers;
 import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
+import doge.watchdoge.imagehandlers.GpsPictureCreationThread;
+import doge.watchdoge.imagehandlers.ImageHandlers;
 import doge.watchdoge.imagehandlers.PictureCreationThread;
 
 
@@ -300,6 +300,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public void  albumButtonClick(View v) {
         Intent albumActivityIntent = new Intent(this, AlbumActivity.class);
         startActivity(albumActivityIntent);
+    }
+
+    /**
+     * Display help text for the title
+     */
+    public void titleHelpClick(View v) {
+
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_title_text, Toast.LENGTH_LONG);
+        t.show();
+
+    }
+    /**
+     * Display help text for the description
+     */
+    public void descHelpClick(View v) {
+
+        Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_help_text, Toast.LENGTH_LONG);
+        t.show();
+
     }
 
     /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
