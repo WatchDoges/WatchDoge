@@ -3,7 +3,6 @@ package doge.watchdoge.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -37,11 +36,12 @@ import java.util.HashMap;
 import java.util.Set;
 
 import doge.watchdoge.R;
+import doge.watchdoge.imagehandlers.GpsPictureCreationThread;
 import doge.watchdoge.imagehandlers.ImageHandlers;
-import doge.watchdoge.creategpspicture.createGPSPicture;
 import doge.watchdoge.applicationcleaup.CleanupHelper;
 import doge.watchdoge.externalsenders.EmailSender;
 import doge.watchdoge.gpsgetter.GpsCoordinates;
+import doge.watchdoge.imagehandlers.PictureCreationThread;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, ConnectionCallbacks,
@@ -74,12 +74,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static int DISPLACEMENT = 5; // 5 meters displacement triggers locationupdate
 
     // XML component declarations
-    private EditText titleField;
-    private EditText descField;
-    private RadioGroup radioGroup1;
-    private RadioButton privateButton;
-    private RadioButton publicButton;
-    private Button sendButton;
+    private static EditText titleField;
+    private static EditText descField;
+    private static RadioGroup radioGroup1;
+    private static RadioButton privateButton;
+    private static RadioButton publicButton;
+    private static ImageButton sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
         privateButton = (RadioButton) findViewById(R.id.private_button);
         publicButton = (RadioButton) findViewById(R.id.public_button);
-        sendButton = (Button) findViewById(R.id.send_button);
+        sendButton = (ImageButton) findViewById(R.id.send_button);
 
         titleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                enableSendButton();
+                toggleSendButton();
             }
         });
 
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                enableSendButton();
+                toggleSendButton();
             }
         });
 
@@ -201,20 +201,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onCheckedChanged(RadioGroup radioGroup1, int checkedId) {
                 boolean isChecked = privateButton.isChecked() || publicButton.isChecked();
-                if (isChecked) enableSendButton();
+                if (isChecked) toggleSendButton();
             }
         });
+        toggleSendButton();
     }
 
     /**
      * Enables/disables and greys out the send button.
      */
-    private void enableSendButton() {
+    private static void toggleSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
                 && descField.getText().toString().length() > 0
-                && radioGroup1.getCheckedRadioButtonId() != -1;
+                && radioGroup1.getCheckedRadioButtonId() != -1
+                && !uris.isEmpty();
         sendButton.setEnabled(enable);
-        if (enable) sendButton.setAlpha(1);
+        sendButton.setClickable(enable);
+        if (enable) sendButton.setAlpha(1f);
         else sendButton.setAlpha(0.5f);
     }
 
@@ -250,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * uris hashmap.
      * Purpose: Used to track problem pictures and the gps picture of a report.
      */
-    private void updateUrisHashmap(String key, Uri value) {
+    public static void updateUrisHashmap(String key, Uri value) {
         //If a GPS Picture already exists, remove it and the actual picture first.
         if (key == MainActivity.gpspicbasename && MainActivity.uris.containsKey(key)) {
             Uri oldPic = MainActivity.uris.get(key);
@@ -260,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
+        toggleSendButton();
     }
 
     /**
@@ -305,30 +309,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            System.out.println("Doing the request-image-capture");
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Uri probpicuri = ImageHandlers.bitmapToPNG(imageBitmap, newProblemPicName);
-            if (probpicuri != null)
-                updateUrisHashmap(newProblemPicName, probpicuri);
-//            ImageView img = (ImageView) findViewById(R.id.imageView);
-//            img.setImageBitmap(imageBitmap);
-            gpsPicture();
-        }
-        else if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE){
+
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE) {
             //Get our saved file into a bitmap object:
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
-            File file = new File(Environment.getExternalStorageDirectory()+File.separator + newProblemPicName);
-            if(file != null) {
-                Uri probPicUri = ImageHandlers.decodeSampledBitmapFromFile(file.getAbsolutePath(), newProblemPicName, 1920, 1080);
-                pictureList.add(file);
-                if (probPicUri != null)
-                    updateUrisHashmap(newProblemPicName, probPicUri);
-//                ImageView img = (ImageView) findViewById(R.id.imageView);
-//                img.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-            }
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + newProblemPicName);
+            Object[] DataTransfer = new Object[2];
+            DataTransfer[0] = file;
+            DataTransfer[1] = newProblemPicName;
+
+            Uri probPicUri = null;
+
+            //thread is created that processes the problem picture
+            PictureCreationThread thread = new PictureCreationThread(DataTransfer, probPicUri);
+            thread.start();
+
             gpsPicture();
         }
     }
@@ -464,31 +461,34 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
-    private void gpsPicture() {
-        try {
-            Bitmap tmp;
-            if (!mRequestingLocationUpdates) {
-                tmp = createGPSPicture.CreateGPSPicture(gpscoordinates);
-            } else {
-                tmp = createGPSPicture.CreateGPSPicture(null);
-            }
-
-            //ImageView img = (ImageView) findViewById(R.id.imageView);
-            //img.setImageBitmap(tmp);
-            String newGpsPictureName = MainActivity.gpspicbasename;
-            if(mLastLocation != null){
-                //int accuracy = (int)mLastLocation.getAccuracy();
-                float accuracy = mLastLocation.getAccuracy();
-                newGpsPictureName += "_"+accuracy+"m";
-            } else newGpsPictureName += "_m";
-
-            Uri newName = ImageHandlers.bitmapToPNG(tmp, newGpsPictureName);
-            if (newName != null)
-                updateUrisHashmap(MainActivity.gpspicbasename, newName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Creating GPS Picture failed.");
-        }
+    public void gpsPicture() {
+//        try {
+//            Bitmap tmp;
+//            if (!mRequestingLocationUpdates) {
+//                tmp = createGPSPicture.CreateGPSPicture(gpscoordinates);
+//            } else {
+//                tmp = createGPSPicture.CreateGPSPicture(null);
+//            }
+//
+//            //ImageView img = (ImageView) findViewById(R.id.imageView);
+//            //img.setImageBitmap(tmp);
+//            String newGpsPictureName = MainActivity.gpspicbasename;
+//            if(mLastLocation != null){
+//                //int accuracy = (int)mLastLocation.getAccuracy();
+//                float accuracy = mLastLocation.getAccuracy();
+//                newGpsPictureName += "_"+accuracy+"m";
+//            } else newGpsPictureName += "_m";
+//
+//            Uri newName = ImageHandlers.bitmapToPNG(tmp, newGpsPictureName);
+//            if (newName != null)
+//                updateUrisHashmap(MainActivity.gpspicbasename, newName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Creating GPS Picture failed.");
+//        }
+        //threaded behaviour of gpsPicture
+        GpsPictureCreationThread thread = new GpsPictureCreationThread(mRequestingLocationUpdates,gpscoordinates,mLastLocation);
+        thread.start();
     }
 
     private void updateLocation() {
