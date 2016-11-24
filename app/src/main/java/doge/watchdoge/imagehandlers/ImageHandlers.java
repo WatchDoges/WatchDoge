@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import doge.watchdoge.activities.MainActivity;
 
@@ -150,11 +151,12 @@ public class ImageHandlers {
      *  Intended use: When starting a new report or closing app, call this to clear
      *  the external directory of pictures taken by this app.
      */
-    public static void deleteOldFiles(HashMap<String, Uri> uris, ArrayList<File> tempImages){
+    public static void deleteOldFiles(HashMap<String, Uri> urisHM, ArrayList<File> tempImages){
         System.out.println("Running on destroy...");
-        for(Uri uri : uris.values()){
-            //Destroy the file references in the uri.
-            deleteFileByUri(uri);
+        Object[] uris = urisHM.values().toArray();
+        for(Object uri : uris){
+            //Destroy the file referenced by the String-Uri pair.
+            deleteOnlyFile((Uri)uri);
         }
         //deleting all temporary images
         for(File file : tempImages){
@@ -164,19 +166,37 @@ public class ImageHandlers {
     }
 
     /**
-     * Given an uri, removes the corresponding file, reports it into the console
-     * @param uri
+     * Given an uri and key, removes the corresponding file
+     * Uri: The actual file to be removed
+     * Key: The key name of said Uri in the HashMap where it is stored
+     * @param uri key
      * @return boolean success or fail
      */
-    public static boolean deleteFileByUri(Uri uri){
-        File pictureFile = new File(uri.getPath());
-        if (pictureFile!=null) {
-            System.out.println("Deleting picture " + pictureFile.getName() + "...");
-            pictureFile.delete();
-            System.out.println("Delete succeeded!");
+    public static boolean deleteFileByUri(Uri uri, String key){
+        if (deleteOnlyFile(uri)) {
+            System.out.println("Deleting picture " + key + "...");
+            MainActivity.uris.remove(key);
             return true;
         } else {
             System.out.println("Picture was null!");
+            return false;
+        }
+    }
+
+    public static boolean deleteFileByKey(String key){
+        Uri targetUri = MainActivity.uris.get(key);
+        if(targetUri!=null)
+            return deleteFileByUri(targetUri, key);
+        return false;
+    }
+
+    private static boolean deleteOnlyFile(Uri uri){
+        File pictureFile = new File(uri.getPath());
+        if (pictureFile!=null) {
+            System.out.println("Deleting picture " + pictureFile.getName());
+            pictureFile.delete();
+            return true;
+        } else {
             return false;
         }
     }
