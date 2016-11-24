@@ -64,16 +64,6 @@
                     android:isScrollContainer="false"
                     android:maxLines="1" />
 
-                <ImageButton
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.05"
-                    android:background="@null"
-                    app:srcCompat="@drawable/ic_help_green_36dp"
-                    android:id="@+id/title_help"
-                    android:onClick="titleHelpClick"/>
             </LinearLayout>
 
             <LinearLayout
@@ -93,15 +83,6 @@
                     android:inputType="textMultiLine"
                     android:maxLines="12" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|center"
-                    android:layout_weight="0.06"
-                    android:background="@null"
-                    app:srcCompat="@drawable/ic_help_green_36dp"
-                    android:id="@+id/desc_help"
-                    android:onClick="descHelpClick" />
             </LinearLayout>
 
 
