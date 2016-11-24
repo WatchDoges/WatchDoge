@@ -41,34 +41,69 @@
         </RadioGroup>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.95">
+            android:layout_weight="0.92"
+            android:orientation="vertical">
 
-            <EditText
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/title_field"
-                android:hint="@string/title_hint"
-                android:layout_weight="0.1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:isScrollContainer="false" />
+                android:orientation="horizontal">
 
-            <EditText
+                <EditText
+                    android:id="@+id/title_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.90"
+                    android:ellipsize="end"
+                    android:hint="@string/title_hint"
+                    android:inputType="text"
+                    android:isScrollContainer="false"
+                    android:maxLines="1" />
+
+                <ImageButton
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.1"
+                    android:background="@null"
+                    app:srcCompat="@drawable/ic_help_green_36dp"
+                    android:id="@+id/title_help"
+                    android:onClick="titleHelpClick"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/desc_field"
-                android:hint="@string/desc_hint"
-                android:layout_weight="0.9"
-                android:gravity="top|center_vertical"
-                android:ellipsize="end"
-                android:maxLines="12" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/desc_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.54"
+                    android:ellipsize="end"
+                    android:gravity="top"
+
+                    android:hint="@string/desc_hint"
+                    android:inputType="textMultiLine"
+                    android:maxLines="12" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:layout_weight="0.1"
+                    android:background="@null"
+                    app:srcCompat="@drawable/ic_help_green_36dp"
+                    android:id="@+id/desc_help"
+                    android:onClick="descHelpClick" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <GridLayout
@@ -104,7 +139,7 @@
                     android:background="@null"
                     android:layout_gravity="right"
                     android:layout_margin="2dp"
-                    android:src="@drawable/ic_photo_camera_green"/>
+                    android:src="@drawable/ic_photo_camera_green_48dp"/>
 
                 <ImageButton
                     android:layout_width="match_parent"
@@ -115,7 +150,7 @@
                     android:layout_weight="0.10"
                     android:layout_margin="2dp"
                     android:alpha=".5"
-                    android:src="@drawable/ic_send_green"
+                    android:src="@drawable/ic_send_green_48dp"
                     android:background="@null" />
 
             </LinearLayout>

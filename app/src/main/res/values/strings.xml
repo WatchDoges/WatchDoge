@@ -7,4 +7,6 @@
     <string name="title_view">Title</string>
     <string name="desc_view">Description</string>
     <string name="report_type_view">Report type</string>
+    <string name="popup_title_text">E.g. Window glass cracked instead of: Window broken</string>
+    <string name="popup_help_text">Describe problem precisely. E.g. Window cannot be opened, handle stuck</string>
 </resources>

@@ -7,4 +7,6 @@
     <string name="title_view">Rubrik</string>
     <string name="desc_view">Beskrivning</string>
     <string name="report_type_view">Rapporttyp</string>
+    <string name="popup_title_text">T.ex. Fönsterglas sprucket istället för: Fönster sönder</string>
+    <string name="popup_help_text">Beskriv noggrant. T.ex. Fönstret öppnas ej, handtag kärvat</string>
 </resources>
