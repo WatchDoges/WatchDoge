@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         //Regular problem pictures are automatically added.
         MainActivity.uris.put(key, value);
-        toggleSendButton();
     }
 
     /**
@@ -298,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * The album button functionality
      */
     public void  albumButtonClick(View v) {
+
         Intent albumActivityIntent = new Intent(this, AlbumActivity.class);
         startActivity(albumActivityIntent);
     }
@@ -306,19 +306,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
      * Display help text for the title
      */
     public void titleHelpClick(View v) {
-
         Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_title_text, Toast.LENGTH_LONG);
         t.show();
-
     }
+
     /**
      * Display help text for the description
      */
     public void descHelpClick(View v) {
-
         Toast t = Toast.makeText(this.getApplicationContext(), R.string.popup_help_text, Toast.LENGTH_LONG);
         t.show();
-
     }
 
     /** Input: request and result code of the caller (camera), data containing image thumbnail from camera
@@ -344,7 +341,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             //thread is created that processes the problem picture
             PictureCreationThread thread = new PictureCreationThread(DataTransfer, probPicUri);
             thread.start();
-
             gpsPicture();
         }
     }
@@ -419,9 +415,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.READ_PHONE_STATE,
+                //Manifest.permission.READ_PHONE_STATE,
 //                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.WRITE_CONTACTS,
+                //Manifest.permission.WRITE_CONTACTS,
         };
 
         // Set size to how many permissions you want to request
