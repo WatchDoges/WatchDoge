@@ -151,7 +151,7 @@ public class ImageHandlers {
      *  Intended use: When starting a new report or closing app, call this to clear
      *  the external directory of pictures taken by this app.
      */
-    public static void deleteOldFiles(HashMap<String, Uri> urisHM, ArrayList<File> tempImages){
+    public static void deleteOldFiles(HashMap<String, Uri> urisHM){
         System.out.println("Running on destroy...");
         Object[] uris = urisHM.values().toArray();
         for(Object uri : uris){
@@ -159,9 +159,6 @@ public class ImageHandlers {
             deleteOnlyFile((Uri)uri);
         }
         //deleting all temporary images
-        for(File file : tempImages){
-            file.delete();
-        }
         MainActivity.uris.clear();
     }
 

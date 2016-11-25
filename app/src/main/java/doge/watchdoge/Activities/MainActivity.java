@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private final int requestGranted = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private GpsCoordinates coordinates;
-    public static ArrayList<File> pictureList = new ArrayList<File>();
     public static HashMap<String, Uri> uris = new HashMap<String, Uri>();
     private static Pair<Double, Double> gpscoordinates;
     public static final String gpspicbasename = "gpspicture";
@@ -326,9 +325,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
 
-        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            String newProblemPicName = findFreshName(MainActivity.probpicbasename, MainActivity.uris);
+
             //Get our saved file into a bitmap object:
             System.out.println("Doing the capture-image-fullsize in MainActivity.");
             File file = new File(Environment.getExternalStorageDirectory() + File.separator + newProblemPicName);
@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             Uri probPicUri = null;
 
             //thread is created that processes the problem picture
-            PictureCreationThread thread = new PictureCreationThread(DataTransfer, probPicUri);
+            PictureCreationThread thread = new PictureCreationThread(DataTransfer);
             thread.start();
             gpsPicture();
         }

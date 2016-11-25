@@ -50,7 +50,7 @@ public class FeedbackActivity extends AppCompatActivity {
      *      on all activities created.
      */
     public void closeButtonClick(View v){
-        ImageHandlers.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        ImageHandlers.deleteOldFiles(MainActivity.uris);
         CleanupHelper.isExitFlagRaised = true;
         finish();
     }
@@ -61,7 +61,7 @@ public class FeedbackActivity extends AppCompatActivity {
      */
     public void newReportButtonClick(View v){
         HashMap<String, Uri> uris = MainActivity.uris;
-        ImageHandlers.deleteOldFiles(uris, MainActivity.pictureList);
+        ImageHandlers.deleteOldFiles(uris);
         Intent homeIntent = new Intent(this, MainActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);

@@ -16,11 +16,10 @@ import doge.watchdoge.activities.MainActivity;
  */
 public class PictureCreationThread extends Thread {
     Object[] DataTransfer;
-    Uri probPicUri;
+    Uri probPicUri = null;
 
-    public PictureCreationThread(Object[] data, Uri probPicUri) {
+    public PictureCreationThread(Object[] data) {
         DataTransfer = data;
-        this.probPicUri = probPicUri;
     }
 
     public void run() {
@@ -35,7 +34,10 @@ public class PictureCreationThread extends Thread {
 
         if (probPicUri != null)
             MainActivity.updateUrisHashmap((String)DataTransfer[1], probPicUri);
-        }
+        if (file != null)
+            file.delete();
+    }
+
 }
 
 
