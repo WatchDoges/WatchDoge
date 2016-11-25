@@ -175,7 +175,5 @@ public class AlbumActivity extends AppCompatActivity
         state = 0;
         Uri uri2 = getRequestedUri(DEFAULT);
         imageSwitcher.setImageURI(uri2);
-        Toast t = Toast.makeText(this.getApplicationContext(), "Image deleted", Toast.LENGTH_LONG);
-        t.show();
     }
 }
