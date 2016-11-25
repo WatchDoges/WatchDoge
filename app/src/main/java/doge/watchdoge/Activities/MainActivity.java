@@ -213,8 +213,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static void toggleSendButton() {
         boolean enable = titleField.getText().toString().length() > 0
                 && descField.getText().toString().length() > 0
-                && radioGroup1.getCheckedRadioButtonId() != -1
-                && !uris.isEmpty();
+                && radioGroup1.getCheckedRadioButtonId() != -1;
+                //&& !uris.isEmpty();
         sendButton.setEnabled(enable);
         sendButton.setClickable(enable);
         if (enable) sendButton.setAlpha(1f);
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (key == MainActivity.gpspicbasename && MainActivity.uris.containsKey(key)) {
             Uri oldPic = MainActivity.uris.get(key);
             if (!oldPic.getPath().equals(value.getPath()))
-                ImageHandlers.deleteFileByUri(oldPic);
+                ImageHandlers.deleteFileByUri(oldPic, key);
             MainActivity.uris.remove(key);
         }
         //Regular problem pictures are automatically added.

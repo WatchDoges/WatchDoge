@@ -1,6 +1,7 @@
 package doge.watchdoge.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,7 +60,8 @@ public class FeedbackActivity extends AppCompatActivity {
      *  Effect: Deletes all old pictures and restarts the MainActivity with cleared fields.
      */
     public void newReportButtonClick(View v){
-        ImageHandlers.deleteOldFiles(MainActivity.uris, MainActivity.pictureList);
+        HashMap<String, Uri> uris = MainActivity.uris;
+        ImageHandlers.deleteOldFiles(uris, MainActivity.pictureList);
         Intent homeIntent = new Intent(this, MainActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);

@@ -124,6 +124,25 @@ public class AlbumActivity extends AppCompatActivity
         }
     }
 
+    private String getRequestedKey(int direction){
+        System.out.println("Requesting uri");
+        try {
+            Object[] keys = (MainActivity.uris.keySet()).toArray();
+            int length = keys.length;
+            if(length==0) return null;
+            else {
+                int targetIndex = newState(direction, length);
+                String target = (String) keys[targetIndex];
+                System.out.println("Returning actual target");
+                return target;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Returning null target");
+            return null;
+        }
+    }
+
     private int newState(int direction, int maxLength){
         System.out.println("Setting state. MaxLength: " + maxLength);
         if(maxLength==0) return (updateState(0));
@@ -150,9 +169,13 @@ public class AlbumActivity extends AppCompatActivity
     }
 
     public void deletePictureClick(View v){
-        //Uri uri = getRequestedUri(DEFAULT);
-        //ImageHandlers.deleteFileByUri(uri);
-        Toast t = Toast.makeText(this.getApplicationContext(), "To do", Toast.LENGTH_LONG);
+        String key = getRequestedKey(DEFAULT);
+        imageSwitcher.setImageURI(null);
+        if(key!=null) ImageHandlers.deleteFileByKey(key);
+        state = 0;
+        Uri uri2 = getRequestedUri(DEFAULT);
+        imageSwitcher.setImageURI(uri2);
+        Toast t = Toast.makeText(this.getApplicationContext(), "Image deleted", Toast.LENGTH_LONG);
         t.show();
     }
 }

@@ -31,7 +31,7 @@
                 <ImageButton
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:srcCompat="@drawable/ic_perm_media_green_48dp"
+                    app:srcCompat="@drawable/ic_send_green_left_48dp"
                     android:onClick="backToMainButtonClick"
                     android:id="@+id/ibackToMainButton"
                     android:background="@null"
@@ -46,7 +46,7 @@
                     android:id="@+id/deletePicture"
                     android:background="@null"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="60dp"
                     android:scaleType="fitCenter"
                     android:adjustViewBounds="true"/>
             </LinearLayout>
