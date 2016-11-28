@@ -110,9 +110,10 @@ public class ImageHandlers {
      *  Effect: Decodes a file from the camera to a Bitmap with the best match to the desired resolution
      *  Returns to caller when Bitmap conversion is finished
      */
-    public static Uri decodeSampledBitmapFromFile(String path, String pictureName, int reqWidth, int reqHeight)
+    public static Uri decodeSampledBitmapFromFile(String path, String pictureName)
     { // BEST QUALITY MATCH
-
+        int reqWidth;
+        int reqHeight;
         //First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -123,6 +124,15 @@ public class ImageHandlers {
         final int width = options.outWidth;
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         int inSampleSize = 1;
+
+        if(height > width){
+            reqHeight = 1920;
+            reqWidth = 1080;
+        }
+        else{
+            reqHeight = 1080;
+            reqWidth = 1920;
+        }
 
         if (height > reqHeight)
         {
