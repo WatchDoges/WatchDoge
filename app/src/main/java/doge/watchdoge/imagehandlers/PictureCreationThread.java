@@ -26,7 +26,7 @@ public class PictureCreationThread extends Thread {
         File file = (File)DataTransfer[0];
         //debug time taken creating picture
         long startTime = System.currentTimeMillis();
-        probPicUri = ImageHandlers.decodeSampledBitmapFromFile(file.getAbsolutePath(), (String)DataTransfer[1], 1920, 1080);
+        probPicUri = ImageHandlers.decodeSampledBitmapFromFile(file.getAbsolutePath(), (String)DataTransfer[1]);
 
         //debug time taken creating picture
         long difference = System.currentTimeMillis() - startTime;
